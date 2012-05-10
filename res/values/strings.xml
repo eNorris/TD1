@@ -3,5 +3,20 @@
 
     <string name="hello">Hello World, MainActivity!</string>
     <string name="app_name">TD1</string>
+    <string name="levelSelect_str">Select A Level</string>
+    <string name="mainHeader_str">Tower Defense Game 1</string>
+    <string name="mainStartButton_str">Start Level</string>
+    
+    <string-array name="levels">
+        <item>Level 1 - The Jungle</item>
+        <item>Level 2 - The Swamp</item>
+        <item>Level 3 - The Desert</item>
+        <item>Level 4 - The Lake</item>
+        <item>Level 5 - The Ocean</item>
+        <item>Level 6 - The Forest</item>
+        <item>Level 7 - The Tundra</item>
+        <item>Level 8 - The Moon</item>
+    </string-array>
+    
 
 </resources>
