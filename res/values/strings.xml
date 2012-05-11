@@ -6,6 +6,7 @@
     <string name="levelSelect_str">Select A Level</string>
     <string name="mainHeader_str">Tower Defense Game 1</string>
     <string name="mainStartButton_str">Start Level</string>
+    <string name="levelSelectButtonDesc_str">Shows the level that will be played</string>
     
     <string-array name="levels">
         <item>Level 1 - The Jungle</item>
@@ -15,7 +16,11 @@
         <item>Level 5 - The Ocean</item>
         <item>Level 6 - The Forest</item>
         <item>Level 7 - The Tundra</item>
-        <item>Level 8 - The Moon</item>
+        <item>Level 8 - The Canyon</item>
+        <item>Level 9 - The Valley</item>
+        <item>Level 10 - The Mountain</item>
+        <item>Level 11 - The Plateau</item>
+        <item>Level 12 - The Moon</item>
     </string-array>
     
 

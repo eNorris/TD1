@@ -3,23 +3,31 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center_horizontal"
-    android:orientation="vertical" >
-
+    android:orientation="vertical" 
+    android:background="#111111">
+
     <TextView
-        android:id="@+id/headerTextView"
+        android:id="@+id/headerTextView_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/mainHeader_str"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
+
     <Spinner
-        android:id="@+id/levelSelectSpinner"
+        android:id="@+id/levelSelectSpinner_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:prompt="@string/levelSelect_str" />
-
+
+    <ImageView
+        android:id="@+id/levelSelectImg_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/levelSelectButtonDesc_str"
+        android:src="@drawable/choose" />
+
     <Button
-        android:id="@+id/startButton"
+        android:id="@+id/startButton_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
