@@ -55,6 +55,15 @@ class GraphicObject{
 		updateTopLeft();
 	}
 	
+	public void move(int sx, int sy){
+		x += sx; y += sy;
+		cx += sx; cy += sy;
+	}
+	
+	public void advance(){
+		move(dx, dy);
+	}
+	
 	public void updateCenter(){
 		cx = x + w/2;
 		cy = y + h/2;
@@ -65,3 +74,137 @@ class GraphicObject{
 		y = cy - h/2;
 	}
 }
+
+
+/**
+ * Extends the GraphicObject class. Adds health functionality
+ * @author Edward Norris
+ *
+ */
+class DestructableGraphicsObject extends GraphicObject{
+
+	// Member Variables
+	int m_maxHealth = 1;
+	int m_health = 1;
+	boolean m_alive = true;
+	
+	DestructableGraphicsObject(Bitmap srcBitmap) {
+		super(srcBitmap);
+	}
+	
+	/**
+	 * Initializes an objects health, both maxHealth and health are set to the 
+	 * provided parameter
+	 * @param health
+	 * 	The value to which health and maxHealth will be set. If this value is 0 or 
+	 * 	less, both will be set to 1
+	 */
+	public void initHealth(int health){
+		setMaxHealth(health);
+		m_health = m_maxHealth;
+	}
+	
+	/**
+	 * Sets an objects maxHealth. Must be greater than zero
+	 * @param maxHealth
+	 * 	The value maxHealth will be set to - if zero or less, maxHealth will be 
+	 * 	set to 1 instead and false will be returned.
+	 * @return
+	 * 	True if maxHealth was set the the variable sent, false if it was defaulted to 1
+	 */
+	public boolean setMaxHealth(int maxHealth){
+		if(maxHealth > 0){
+			m_maxHealth = maxHealth;
+			return true;
+		}else{
+			m_maxHealth = 1;
+			return false;
+		}
+	}
+	
+	/**
+	 * Damages the object and returns whether the object is still alive after
+	 * damage is dealt 
+	 * @param damageDone
+	 * 	The amount of health subtracted from m_health (can be negative or zero, 
+	 *  does <b>Not</b> cap amount of damage that can be healed)
+	 * @return
+	 * 	True if the object is still alive, false otherwise
+	 */
+	public boolean doDamage(int damageDone){
+		m_health -= damageDone;
+		return checkAlive();
+	}
+	
+	/**
+	 * Damages the object and makes certain checks to verify that the object was
+	 * damaged and that the objects health never becomes negative
+	 * @param damageDone
+	 * 	The amount of damage done, negative values will be treated as 0
+	 * @return
+	 * 	True if the object is still alive, false otherwise
+	 */
+	public boolean doDamageStrict(int damageDone){
+		int correctedDamage = damageDone < 0 ? 0 : damageDone;
+		m_health -= correctedDamage;
+		m_health = m_health < 0 ? 0 : m_health;
+		return checkAlive();
+	}
+	
+	/**
+	 * Strictly heals the object (will not damage) and will not allow health
+	 * to exceed maxHealth
+	 * @param healDone
+	 * 	The amount of health that will be restored, health will be capped at maxHealth
+	 * @return
+	 * 	True if the object is still alive, false otherwise
+	 */
+	public boolean doHealStrict(int healDone){
+		int correctedHeal = healDone < 0 ? 0 : healDone;
+		m_health -= correctedHeal;
+		m_health = m_health > m_maxHealth ? m_maxHealth : m_health;
+		return checkAlive();
+	}
+	
+	/**
+	 * Adds to an object's current health, will not allow health to exceed maxHealth
+	 * @param healDone
+	 * 	The amount that will be added to the object's health (will accept zero
+	 *  negative numbers)
+	 * @return
+	 * 	True if the object is still alive, false otherwise
+	 */
+	public boolean doHeal(int healDone){
+		m_health += healDone;
+		if(m_health > m_maxHealth)
+			m_health = m_maxHealth;
+		return checkAlive();
+	}
+	
+	
+	/**
+	 * updates m_alive and returns true if still alive
+	 * @return
+	 * 	True if health > 0, false otherwise false
+	 */
+	public boolean checkAlive(){
+		if(m_health > 0)
+			m_alive = true;
+		else
+			m_alive = false;
+		return m_alive;
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+

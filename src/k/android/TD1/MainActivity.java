@@ -17,6 +17,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 	
 	private static final String TAG = "MainActivity:";
+	public static int m_level = LevelCode.UNKNOWN_LEVEL;
 	
     /** Called when the activity is first created. */
     @Override
@@ -44,42 +45,55 @@ public class MainActivity extends Activity {
 				switch(pos){
 				case 0: // Jungle
 					levelImg.setImageResource(R.drawable.jungle);
+					m_level = LevelCode.JUNGLE_LEVEL;
 					break;
 				case 1: // Swamp
 					levelImg.setImageResource(R.drawable.swamp);
+					m_level = LevelCode.SWAMP_LEVEL;
 					break;
 				case 2: // Desert
 					levelImg.setImageResource(R.drawable.desert);
+					m_level = LevelCode.DESERT_LEVEL;
 					break;
 				case 3: // Lake
 					levelImg.setImageResource(R.drawable.lake);
+					m_level = LevelCode.LAKE_LEVEL;
 					break;
 				case 4: // Ocean
 					levelImg.setImageResource(R.drawable.ocean);
+					m_level = LevelCode.OCEAN_LEVEL;
 					break;
 				case 5: // Forest
 					levelImg.setImageResource(R.drawable.forest);
+					m_level = LevelCode.FOREST_LEVEL;
 					break;
 				case 6: // Tundra
 					levelImg.setImageResource(R.drawable.tundra);
+					m_level = LevelCode.TUNDRA_LEVEL;
 					break;
 				case 7: // Canyon
 					levelImg.setImageResource(R.drawable.canyon);
+					m_level = LevelCode.CANYON_LEVEL;
 					break;
 				case 8: // Valley
 					levelImg.setImageResource(R.drawable.valley);
+					m_level = LevelCode.VALLEY_LEVEL;
 					break;
 				case 9: // Mountain
 					levelImg.setImageResource(R.drawable.mountain);
+					m_level = LevelCode.MOUNTAIN_LEVEL;
 					break;
 				case 10: // Plateau
 					levelImg.setImageResource(R.drawable.plateau);
+					m_level = LevelCode.PLATEAU_LEVEL;
 					break;
 				case 11: // Moon
 					levelImg.setImageResource(R.drawable.moon);
+					m_level = LevelCode.MOON_LEVEL;
 					break;
 				default:
 					levelImg.setImageResource(R.drawable.choose);
+					m_level = LevelCode.JUNGLE_LEVEL;
 				};
 			}
 
@@ -107,6 +121,7 @@ class OnClickActivitySwapper implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		Intent myIntent1 = new Intent(m_caller, m_next);
+//		myIntent1.putExtra("Kat", sta)
 	    m_caller.startActivity(myIntent1);
 	}
 	
