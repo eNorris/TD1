@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <!-- 
+    <selector
+		xmlns:android="http://schemas.android.com/apk/res/android">
+		<item android:state_enabled="false"
+			android:drawable="@drawable/button_grayed" />
+		<item android:state_enabled="true"
+			android:state_pressed="true" android:drawable="@drawable/button_pressed" />
+		<item android:state_enabled="true"
+			android:state_focused="true" android:drawable="@drawable/button_selected" />
+		<item android:state_enabled="true"
+			android:drawable="@drawable/button_normal" />
+	</selector>
+	
+	<Button
+        android:id="@+id/newTowerButton_id"
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_normal"
+        android:text="New Tower" />
+     -->
+    
+	<Button
+        android:id="@+id/newTowerButton_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Tower" />
+    
+    
+    
+    <FrameLayout
+	 android:layout_width="fill_parent"
+	 android:layout_height="fill_parent">
+		<k.android.TD1.GameView
+		 android:layout_width="fill_parent"
+		 android:layout_height="fill_parent"/>
+	</FrameLayout>
+
+</LinearLayout>

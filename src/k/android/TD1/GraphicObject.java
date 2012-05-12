@@ -195,6 +195,14 @@ class DestructableGraphicObject extends GraphicObject{
 		return m_alive;
 	}
 	
+	/**
+	 * Instantly brings a creep's health to zero and sets it as no longer alive
+	 */
+	public void kill(){
+		m_health = 0;
+		m_alive = false;
+	}
+	
 }
 
 

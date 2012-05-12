@@ -2,7 +2,6 @@ package k.android.TD1;
 
 import java.util.ArrayList;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.util.Log;
 
@@ -13,15 +12,17 @@ public class Creep extends DestructableGraphicObject{
 	float movement = 10;
 	float movementLeft = 5;
 	float movementToGo = 1;
-//	int defense = 1;
-//	int mass = 1;
 	int targetPoint = 0;
 	boolean lockedToPath = false;
-//	Color color = new Color();
 	CreepPath path = new CreepPath();
 	
-	Creep(Bitmap srcBitmap) {
+	public static final int CREEP_TYPE_1 = 0;
+	public static final int CREEP_TYPE_2 = 1;
+	public static final int CREEP_TYPE_3 = 2;
+	
+	Creep(Bitmap srcBitmap, int creepType) {
 		super(srcBitmap);
+		setCreepType(creepType);
 	}
 	
 	/**
@@ -40,7 +41,7 @@ public class Creep extends DestructableGraphicObject{
 		float totaltogo = (float) Math.sqrt(xtogo*xtogo + ytogo*ytogo);
 		movementToGo = totaltogo;
 		// Check for divide by zero error in the case of multiple points on top of one another
-		float modifier = totaltogo == 0.0f ? 0.0f : movement / totaltogo;
+		float modifier = (totaltogo == 0.0f ? 0.0f : movement / totaltogo);
 		dx = (int) (xtogo * modifier);
 		dy = (int) (ytogo * modifier);
 		return false;
@@ -72,7 +73,7 @@ public class Creep extends DestructableGraphicObject{
 				pathAdvance();
 			}
 		}else{
-			Log.v(TAG, "Advancing on no path");
+//			Log.v(TAG, "Advancing on no path");
 		}
 		return false;
 	}
@@ -92,9 +93,28 @@ public class Creep extends DestructableGraphicObject{
 			Log.v(TAG, "Set to valid path");
 			return true;
 		}else{
-			Log.v(TAG, "Setting on invalid path");
+//			Log.v(TAG, "Setting on invalid path");
 		}
 		return false;
+	}
+	
+	public void setCreepType(int creepTypeId){
+		switch(creepTypeId){
+		case Creep.CREEP_TYPE_1:
+			initHealth(300);
+			movement = 5;
+			break;
+		case Creep.CREEP_TYPE_2:
+			initHealth(500);
+			movement = 7;
+			break;
+		case Creep.CREEP_TYPE_3:
+			initHealth(1000);
+			movement = 3;
+			break;
+		default:
+			initHealth(1);
+		}
 	}
 }
 

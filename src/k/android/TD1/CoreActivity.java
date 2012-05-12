@@ -11,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -25,7 +26,8 @@ public class CoreActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		m_gameView = new GameView(this);
-		setContentView(m_gameView);
+		setContentView(R.layout.core);
+//		setContentView(m_gameView);
 	}
 }
 
@@ -59,15 +61,7 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 		R.drawable.creep2,
 		R.drawable.creep3
 	};
-	
-//	private int[] m_otherIds = null;
-	
-	Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.forest);
-	Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.creep1);
-	Tower myTower = new Tower(bitmap);
-	Creep myCreep = new Creep(bitmap2);
 
-	
 	public GameView(Context context) {
 		super(context);
 		getHolder().addCallback(this);
@@ -76,17 +70,79 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 		m_level = MainActivity.m_level;
 		m_bgId = getBgResId();
 	}
+	
+	public GameView(Context context,  AttributeSet attrs) {
+		super(context, attrs);
+		getHolder().addCallback(this);
+		m_gameThread = new GameThread(getHolder(), this);
+		setFocusable(true);
+		m_level = MainActivity.m_level;
+		m_bgId = getBgResId();
+	}
+	
+	public GameView(Context context,  AttributeSet attrs, int defStyle) {
+		super(context, attrs);
+		getHolder().addCallback(this);
+		m_gameThread = new GameThread(getHolder(), this);
+		setFocusable(true);
+		m_level = MainActivity.m_level;
+		m_bgId = getBgResId();
+	}
+	/*
+	 public MySurfaceView(Context context, AttributeSet attrs) {
+		  super(context, attrs);
+		  // TODO Auto-generated constructor stub
+		  init();
+		 }
+
+		 public MySurfaceView(Context context, AttributeSet attrs, int defStyle) {
+		  super(context, attrs, defStyle);
+		  // TODO Auto-generated constructor stub
+		  init();
+		 }
+		 */
 
 	@Override
 	public void surfaceCreated(SurfaceHolder arg0) {
 		loadTowerSourceBitmaps(m_towerIds);
 		loadCreepSourceBitmaps(m_creepIds);
 		loadBackgroundSourceBitmap(m_bgId);
-		if(!m_gameThread.isRunning){
+		
+		
+//		if(!m_gameThread.isRunning){
+//			m_gameThread.setRunning(true);
+//			m_gameThread.start();
+//		}
+		
+		if(m_gameThread.getState() == Thread.State.TERMINATED){
+			m_gameThread = new GameThread(getHolder(), this);
+			m_gameThread.setRunning(true);
+			m_gameThread.start();
+		}else{
 			m_gameThread.setRunning(true);
 			m_gameThread.start();
 		}
+		
+/*		
+		if (plot_thread.getState() == Thread.State.TERMINATED) {
+            plot_thread = new WaveformPlotThread(getHolder(), this);
+            plot_thread.setRunning(true);
+            plot_thread.start();
+        }
+        else {
+            plot_thread.setRunning(true);
+            plot_thread.start();
+        }
+*/
+		
+		
+		
+		
 		initPaths(m_paths);
+		
+		for(int i = 0; i < m_paths.size(); i++){
+			Log.v(TAG, m_paths.get(i).points.toString());
+		}
 	}
 	
 	@Override
@@ -113,8 +169,9 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 		if(m_random.nextInt() % 3 == 0){
 			if(m_creepSourceBitmaps.size() == 0)
 				Log.d(TAG, "No creep source");
-			Creep tmp = new Creep(m_creepSourceBitmaps.get(m_random.nextInt(3)));
-			tmp.setOnPath(m_paths.get(m_random.nextInt(10)));  // TODO must init paths first
+			int tmpRand = m_random.nextInt(3);
+			Creep tmp = new Creep(m_creepSourceBitmaps.get(tmpRand), tmpRand);
+			tmp.setOnPath(m_paths.get(m_random.nextInt(10)));
 			m_creeps.add(tmp);
 		}
 		
@@ -157,17 +214,9 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 	}
 	
 	public void loadTowerSourceBitmaps(int[] towerIds){
-//		if(bg != 0)
-//			m_background = new GraphicObject(BitmapFactory.decodeResource(getResources(), bg));
 		if(towerIds != null)
 			for(int i = 0; i < towerIds.length; i++)
 				m_towerSourceBitmaps.add(BitmapFactory.decodeResource(getResources(), towerIds[i]));
-//		if(creeps != null)
-//			for(int i = 0; i < creeps.length; i++)
-//				m_towerSourceBitmaps.add(BitmapFactory.decodeResource(getResources(), creeps[i]));
-//		if(others != null)
-//			for(int i = 0; i < others.length; i++)
-//				m_towerSourceBitmaps.add(BitmapFactory.decodeResource(getResources(), others[i]));
 	}
 	
 	public void loadCreepSourceBitmaps(int[] creepIds){
@@ -212,13 +261,12 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 		}
 	}
 	
-	// TODO account for width of creeps when spawning paths
 	public void initPaths(ArrayList<CreepPath> paths){
 		for(int i = 0; i < 10; i++){
 			CreepPath tmp = new CreepPath();
 			if(this.getHeight() != 0){
-				tmp.addPoint(new Point(-10, Math.abs(m_random.nextInt()) % this.getHeight()));
-				tmp.addPoint(new Point(this.getWidth() + 10, Math.abs(m_random.nextInt()) % this.getHeight()));
+				tmp.addPoint(new Point(-20, Math.abs(m_random.nextInt()) % this.getHeight()));
+				tmp.addPoint(new Point(this.getWidth() + 20, Math.abs(m_random.nextInt()) % this.getHeight()));
 				paths.add(tmp);
 			}else{
 				Log.v(TAG, "Height/Width is zero!!!");
