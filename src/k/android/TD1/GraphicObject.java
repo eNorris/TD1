@@ -81,14 +81,14 @@ class GraphicObject{
  * @author Edward Norris
  *
  */
-class DestructableGraphicsObject extends GraphicObject{
+class DestructableGraphicObject extends GraphicObject{
 
 	// Member Variables
 	int m_maxHealth = 1;
 	int m_health = 1;
 	boolean m_alive = true;
 	
-	DestructableGraphicsObject(Bitmap srcBitmap) {
+	DestructableGraphicObject(Bitmap srcBitmap) {
 		super(srcBitmap);
 	}
 	
