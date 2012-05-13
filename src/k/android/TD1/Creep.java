@@ -26,6 +26,20 @@ public class Creep extends DestructableGraphicObject{
 	}
 	
 	/**
+	 * Copy constructor - Shallow on path and bitmap
+	 * @param src
+	 */
+	Creep(Creep src){
+		super((DestructableGraphicObject) src);
+		movement = src.movement;
+		movementLeft = src.movementLeft;
+		movementToGo = src.movementToGo;
+		targetPoint = src.targetPoint;
+		lockedToPath = src.lockedToPath;
+		path = src.path;
+	}
+	
+	/**
 	 * 
 	 * @return
 	 * 	True when the path is completed, false otherwise
@@ -115,6 +129,10 @@ public class Creep extends DestructableGraphicObject{
 		default:
 			initHealth(1);
 		}
+	}
+	
+	public void onDeath(){
+		// TODO do something
 	}
 }
 

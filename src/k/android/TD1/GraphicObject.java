@@ -4,6 +4,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+// TODO add boolean drawable attribute to GraphicObject
+
 /**
  * 
  * @author Edward Noris
@@ -45,6 +47,21 @@ class GraphicObject{
 		cy = h/2;
 	}
 	
+	/**
+	 * Copy constructor - The bitmap field is <b> shallow coppied</b>
+	 * @param src
+	 * 	The GraphicObject that will be coppied
+	 */
+	GraphicObject(GraphicObject src){
+		this(src.bitmap);
+		x = src.x;
+		y = src.y;
+		cx = src.cx;
+		cy = src.cy;
+		dx = src.dx;
+		dy = src.dy;
+	}
+	
 	public void setPos(int sx, int sy){
 		x = sx; y = sy;
 		updateCenter();
@@ -76,6 +93,15 @@ class GraphicObject{
 }
 
 
+
+
+
+
+
+
+
+
+
 /**
  * Extends the GraphicObject class. Adds health functionality
  * @author Edward Norris
@@ -90,6 +116,17 @@ class DestructableGraphicObject extends GraphicObject{
 	
 	DestructableGraphicObject(Bitmap srcBitmap) {
 		super(srcBitmap);
+	}
+	
+	/**
+	 * Copy Constructor
+	 * @param src
+	 */
+	DestructableGraphicObject(DestructableGraphicObject src){
+		super((GraphicObject) src);
+		m_maxHealth = src.m_maxHealth;
+		m_health = src.m_health;
+		m_alive = src.m_alive;
 	}
 	
 	/**
