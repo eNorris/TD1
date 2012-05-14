@@ -105,14 +105,6 @@ public class Tower extends DestructableGraphicObject{
 	}
 	
 	public boolean draw(Canvas canvas){
-		
-		if(!drawable){
-			Log.d(TAG, "trying to draw nondrawable tower");
-		}
-		if(!visible){
-			Log.d(TAG, "trying to draw nonvisible tower");
-		}
-		
 		boolean toReturn = super.draw(canvas);
 		for(int i = 0; i < attackMethods.size(); i++)
 			if(!attackMethods.get(i).draw(canvas))

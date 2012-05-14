@@ -173,9 +173,6 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 	// Member Functions
 	public void onDraw(Canvas canvas){
 		
-//		if(this.m_towers != CoreActivity.m_gameView.m_towers)
-//			Log.e(TAG, "They're different!!!!!!");
-		
 		// May add more creeps
 		if(m_random.nextInt() % 10 == 0){
 			int tmpRand = m_random.nextInt(3);
@@ -190,11 +187,8 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 				canvas.drawBitmap(m_background.bitmap, null, canvas.getClipBounds(), null);
 		}
 		
-		Log.i(TAG, "@draw: size = " + m_towers.size());
 		for(int i = 0; i < m_towers.size(); i++){
-			Log.i(TAG, "drawing a tower!");
-			if(!m_towers.get(i).draw(canvas))
-				Log.i(TAG, "could not draw tower in the tower array...");
+			m_towers.get(i).draw(canvas);
 		}
 		
 		for(int i = 0; i < m_creeps.size(); i++){
@@ -209,34 +203,11 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 		
 		CoreActivity.m_inputTower.draw(canvas);
 	}
-
-//	public boolean onTouchEvent(MotionEvent event){
-//		if(event.getAction() == MotionEvent.ACTION_DOWN)
-//			if(towerSourceBitmaps != null){
-//				Tower tmp = new Tower(towerSourceBitmaps.get(0));
-//				tmp.setCenter((int)event.getX(), (int)event.getY());
-//				m_towers.add(tmp);
-//			}
-//		return true;
-//	}
-	
-//	public void loadTowerBitmapSources(){
-//		if(Tower.towerBitmapIds != null)
-//			for(int i = 0; i < Tower.towerBitmapIds.length; i++)
-//				Tower.towerBitmapSources.add(BitmapFactory.decodeResource(getResources(), Tower.towerBitmapIds[i]));
-//	}
-//	
-//	public void loadCreepBitmapSources(){
-//		if(Creep.creepBitmapIds != null)
-//			for(int i = 0; i < Creep.creepBitmapIds.length; i++)
-//				Creep.creepBitmapSources.add(BitmapFactory.decodeResource(getResources(), Creep.creepBitmapIds[i]));
-//	}
 	
 	public void loadBackgroundSourceBitmap(int backgroundId){
 		if(backgroundId != 0)
 			m_background = new GraphicObject(BitmapFactory.decodeResource(getResources(), backgroundId));
 	}
-
 	
 	public int getBgResId(){
 		switch(m_level){
@@ -281,10 +252,6 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 			}
 		}
 	}
-	
-//	public void addTowerCloneToWorld(Tower tower){
-//		m_towers.add(tower.shadowCopy());
-//	}
 }
 
 
