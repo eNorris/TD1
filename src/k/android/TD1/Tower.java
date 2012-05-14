@@ -29,28 +29,49 @@ public class Tower extends DestructableGraphicObject{
 	
 	// Member Variables
 	public ArrayList<AttackMethod> attackMethods = new ArrayList<AttackMethod>();
-	public boolean visible = true;
+//	public boolean visible = true;
 	
+	public Tower(){
+		// Default
+	}
 	
 	Tower(Bitmap srcBit) {
 		super(srcBit);
 	}
 	
-	/**
-	 * Copy Constructor
-	 * @param src
-	 */
-	Tower(Tower src){
-		super((DestructableGraphicObject) src);
-		visible = src.visible;
-		attackMethods = new ArrayList<AttackMethod>();
-		for(int i = 0; i < src.attackMethods.size(); i++)
-			attackMethods.add(src.attackMethods.get(i).deepCopy());
-	}
+//	/**
+//	 * Copy Constructor
+//	 * @param src
+//	 */
+//	Tower(Tower src){
+//		super((DestructableGraphicObject) src);
+//		visible = src.visible;
+//		attackMethods = new ArrayList<AttackMethod>();
+//		for(int i = 0; i < src.attackMethods.size(); i++)
+//			attackMethods.add(src.attackMethods.get(i).deepCopy());
+//	}
 	
 	Tower(int towerTypeId){
 		super(towerBitmapSources.get(towerTypeId)); // TODO calculate correct index
 		setType(towerTypeId);
+	}
+	
+	public Tower deepCopy(){
+		Tower tmp = new Tower();
+		tmp = (Tower) super.deepCopy();
+		attackMethods = new ArrayList<AttackMethod>();
+		for(int i = 0; i < attackMethods.size(); i++)
+			tmp.attackMethods.add(attackMethods.get(i).deepCopy());
+		return tmp;
+	}
+	
+	public Tower shadowCopy(){
+		Tower tmp = new Tower();
+		tmp = (Tower) super.shadowCopy();
+		attackMethods = new ArrayList<AttackMethod>();
+		for(int i = 0; i < attackMethods.size(); i++)
+			tmp.attackMethods.add(attackMethods.get(i).deepCopy());
+		return tmp;
 	}
 	
 //	public static void loadBitmaps(int[] towerIds){

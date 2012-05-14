@@ -36,23 +36,56 @@ public class Creep extends DestructableGraphicObject{
 	CreepPath path = new CreepPath();
 	
 
-	Creep(Bitmap srcBitmap, int creepType) {
+	public Creep(){
+		// Default
+	}
+	
+	public Creep(Bitmap srcBitmap, int creepType) {
 		super(srcBitmap);
 		setCreepType(creepType);
 	}
 	
+//	/**
+//	 * Copy constructor - Shallow on path and bitmap
+//	 * @param src
+//	 */
+//	Creep(Creep src){
+//		super((DestructableGraphicObject) src);
+//		movement = src.movement;
+//		movementLeft = src.movementLeft;
+//		movementToGo = src.movementToGo;
+//		targetPoint = src.targetPoint;
+//		lockedToPath = src.lockedToPath;
+//		path = src.path;
+//	}
+	
+	// Not needed, so not implemented
+//	public Creep deepCopy(){
+//		Creep tmp = new Creep();
+//		tmp = (Creep) super.deepCopy();
+//		tmp.movement = movement;
+//		tmp.movementLeft = movementLeft;
+//		tmp.movementToGo = movementToGo;
+//		tmp.targetPoint = targetPoint;
+//		tmp.lockedToPath = lockedToPath;
+//		tmp.path = path.deepCopy(); // TODO implement CreepPath::deepCopy()
+//		return tmp;
+//	}
+	
 	/**
-	 * Copy constructor - Shallow on path and bitmap
-	 * @param src
+	 * <b> Shadow on Bitmap:bitmap <br>
+	 * Shadow on CreepPath:path </b>
 	 */
-	Creep(Creep src){
-		super((DestructableGraphicObject) src);
-		movement = src.movement;
-		movementLeft = src.movementLeft;
-		movementToGo = src.movementToGo;
-		targetPoint = src.targetPoint;
-		lockedToPath = src.lockedToPath;
-		path = src.path;
+	public Creep shadowCopy(){
+		Creep tmp = new Creep();
+		tmp = (Creep) super.deepCopy();
+		tmp.movement = movement;
+		tmp.movementLeft = movementLeft;
+		tmp.movementToGo = movementToGo;
+		tmp.targetPoint = targetPoint;
+		tmp.lockedToPath = lockedToPath;
+		tmp.path = path; // TODO implement CreepPath::deepCopy()
+		return tmp;
 	}
 	
 	/**

@@ -4,22 +4,41 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-// TODO add boolean drawable attribute to GraphicObject
-//           visible?
-
-// TODO add deepCopy routine
-
 // TODO inherit to add Movable and DMGraphicObject as well
 
 /**
- * 
+ * == STRUCT == <br> <br>
+ * -Members- <br>
+ * x - x coordinate of the top left corner of the bitmap <br>
+ * y - y coordinate of the top left corner of the bitmap <br>
+ * cx - x coordinate of the center of the bitmap <br>
+ * cy - y coordinate of the center of the bitmap <br>
+ * dx - x component of the velocity of the bitmap, used in advance() <br>
+ * dy - y component of the velocity of the bitmap, used in advance() <br>
+ * w - width (px) of the bitmap <br>
+ * h - height (px) of the bitmap <br>
+ * bitmap - the Bitmap object that will be drawn <br>
+ * drawable - true if the object is in a state in which drawing is legal <br>
+ * visible - if true, the bitmap should be drawn as long as drawable is also true <br>
  * @author Edward Noris
  *
  */
 class GraphicObject{
+	
+	// Struct members
 	public int x = 0, y = 0, cx = 0, cy = 0, dx = 0, dy = 0,
 			h = 0, w = 0;
-	Bitmap bitmap = null;
+	public Bitmap bitmap = null;
+	public boolean drawable = false;
+	public boolean visible = true;
+	
+	/**
+	 * Default Constructor <br> <br>
+	 * Leaves all values as their default values; not in a drawable state
+	 */
+	GraphicObject(){
+		// Default
+	}
 	
 	/**
 	 * Loads a new resource into the Graphics Object, automatically
@@ -52,19 +71,64 @@ class GraphicObject{
 		cy = h/2;
 	}
 	
+//	/**
+//	 * Copy constructor - The bitmap field is <b> shallow coppied</b>
+//	 * @param src
+//	 * 	The GraphicObject that will be coppied
+//	 */
+//	GraphicObject(GraphicObject src){
+//		this(src.bitmap);
+//		x = src.x;
+//		y = src.y;
+//		cx = src.cx;
+//		cy = src.cy;
+//		dx = src.dx;
+//		dy = src.dy;
+//	}
+	
 	/**
-	 * Copy constructor - The bitmap field is <b> shallow coppied</b>
-	 * @param src
-	 * 	The GraphicObject that will be coppied
+	 * Creates a deep copy of a GraphicObject. Deep copying of the bitmap field is 
+	 * not guaranteed
+	 * @return
+	 * 	A deep copy of the calling object
 	 */
-	GraphicObject(GraphicObject src){
-		this(src.bitmap);
-		x = src.x;
-		y = src.y;
-		cx = src.cx;
-		cy = src.cy;
-		dx = src.dx;
-		dy = src.dy;
+	public GraphicObject deepCopy(){
+		// TODO test
+		GraphicObject tmp = new GraphicObject();
+		tmp.x = x;
+		tmp.y = y;
+		tmp.cx = cx;
+		tmp.cy = cy;
+		tmp.dx = dx;
+		tmp.dy = dy;
+		tmp.w = w;
+		tmp.h = h;
+		tmp.visible = visible;
+		tmp.drawable = drawable;
+		tmp.bitmap = Bitmap.createBitmap(bitmap);
+		return tmp;
+	}
+	
+	/**
+	 * <b>Shadow on Bitmap:bitmap </b> <br><br>
+	 * Creates a shadow copy of the calling object
+	 * @return
+	 * 	a shadow (in bitmap) of the calling object
+	 */
+	public GraphicObject shadowCopy(){
+		GraphicObject tmp = new GraphicObject();
+		tmp.x = x;
+		tmp.y = y;
+		tmp.cx = cx;
+		tmp.cy = cy;
+		tmp.dx = dx;
+		tmp.dy = dy;
+		tmp.w = w;
+		tmp.h = h;
+		tmp.visible = visible;
+		tmp.drawable = drawable;
+		tmp.bitmap = bitmap;
+		return tmp;
 	}
 	
 	public void setPos(int sx, int sy){
@@ -99,16 +163,8 @@ class GraphicObject{
 
 
 
-
-
-
-
-
-
-
-
 /**
- * Extends the GraphicObject class. Adds health functionality
+ * Extends the GraphicObject class (Privatized). Adds health functionality <br><br>
  * @author Edward Norris
  *
  */
@@ -119,19 +175,40 @@ class DestructableGraphicObject extends GraphicObject{
 	int m_health = 1;
 	boolean m_alive = true;
 	
+	DestructableGraphicObject(){
+		// Defaults
+	}
+	
 	DestructableGraphicObject(Bitmap srcBitmap) {
 		super(srcBitmap);
 	}
 	
-	/**
-	 * Copy Constructor
-	 * @param src
-	 */
-	DestructableGraphicObject(DestructableGraphicObject src){
-		super((GraphicObject) src);
-		m_maxHealth = src.m_maxHealth;
-		m_health = src.m_health;
-		m_alive = src.m_alive;
+//	/**
+//	 * Copy Constructor
+//	 * @param src
+//	 */
+//	DestructableGraphicObject(DestructableGraphicObject src){
+//		super((GraphicObject) src);
+//		m_maxHealth = src.m_maxHealth;
+//		m_health = src.m_health;
+//		m_alive = src.m_alive;
+//	}
+	
+
+	public DestructableGraphicObject deepCopy(){
+		DestructableGraphicObject tmp = (DestructableGraphicObject) super.deepCopy();
+		tmp.m_maxHealth = m_maxHealth;
+		tmp.m_health = m_health;
+		tmp.m_alive = m_alive;
+		return tmp;
+	}
+	
+	public DestructableGraphicObject shadowCopy(){
+		DestructableGraphicObject tmp = (DestructableGraphicObject) super.shadowCopy();
+		tmp.m_maxHealth = m_maxHealth;
+		tmp.m_health = m_health;
+		tmp.m_alive = m_alive;
+		return tmp;
 	}
 	
 	/**

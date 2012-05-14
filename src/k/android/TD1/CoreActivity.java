@@ -311,7 +311,7 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 	
 	// TODO Continue here - call this function someday
 	public void addTowerCloneToWorld(Tower tower){
-		m_towers.add(new Tower(tower));
+		m_towers.add(tower.shadowCopy());
 	}
 }
 
