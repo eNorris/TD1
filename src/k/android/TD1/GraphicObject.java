@@ -5,6 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 // TODO add boolean drawable attribute to GraphicObject
+//           visible?
+
+// TODO add deepCopy routine
+
+// TODO inherit to add Movable and DMGraphicObject as well
 
 /**
  * 

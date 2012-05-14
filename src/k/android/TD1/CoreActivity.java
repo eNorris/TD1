@@ -25,7 +25,7 @@ public class CoreActivity extends Activity{
 	// Member Variables
 	GameView m_gameView;
 	static Tower m_inputTower = null;
-	static boolean m_hasTower = false;
+	static boolean m_floatingTower = false;
 		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,7 @@ public class CoreActivity extends Activity{
 			public void onClick(View arg0) {
 				m_inputTower.setType(Tower.TYPE_1);
 				m_inputTower.visible = true;
+				m_floatingTower = true;
 			}
 		});
 		
@@ -51,9 +52,10 @@ public class CoreActivity extends Activity{
 
 	public boolean onTouchEvent(MotionEvent event){
 		if(event.getAction() == MotionEvent.ACTION_UP){
-			if(m_hasTower){
+			if(m_floatingTower){
 				m_gameView.addTowerCloneToWorld(m_inputTower);
 				m_inputTower.visible = false;
+				m_floatingTower = false;
 			}
 		}
 //			if(m_towerSourceBitmaps != null){
