@@ -121,7 +121,6 @@ class OnClickActivitySwapper implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		Intent myIntent1 = new Intent(m_caller, m_next);
-//		myIntent1.putExtra("Kat", sta)
 	    m_caller.startActivity(myIntent1);
 	}
 	

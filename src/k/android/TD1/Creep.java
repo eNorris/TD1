@@ -16,7 +16,6 @@ public class Creep extends DestructableGraphicObject{
 	// Static Variables
 	public static ArrayList<Bitmap> creepBitmapSources;
 	public static int[] creepBitmapIds = {
-//			R.drawable.creepdefault,
 			R.drawable.tower1,
 			R.drawable.tower2,
 			R.drawable.tower3
@@ -51,20 +50,6 @@ public class Creep extends DestructableGraphicObject{
 		setCreepType(creepTypeId);
 	}
 	
-//	/**
-//	 * Copy constructor - Shallow on path and bitmap
-//	 * @param src
-//	 */
-//	Creep(Creep src){
-//		super((DestructableGraphicObject) src);
-//		movement = src.movement;
-//		movementLeft = src.movementLeft;
-//		movementToGo = src.movementToGo;
-//		targetPoint = src.targetPoint;
-//		lockedToPath = src.lockedToPath;
-//		path = src.path;
-//	}
-	
 	// Not needed, so not implemented
 //	public Creep deepCopy(){
 //		Creep tmp = new Creep();
@@ -74,7 +59,7 @@ public class Creep extends DestructableGraphicObject{
 //		tmp.movementToGo = movementToGo;
 //		tmp.targetPoint = targetPoint;
 //		tmp.lockedToPath = lockedToPath;
-//		tmp.path = path.deepCopy(); // TODO implement CreepPath::deepCopy()
+//		tmp.path = path.deepCopy(); // <- requires implement CreepPath::deepCopy()
 //		return tmp;
 //	}
 	
@@ -90,7 +75,7 @@ public class Creep extends DestructableGraphicObject{
 		tmp.movementToGo = movementToGo;
 		tmp.targetPoint = targetPoint;
 		tmp.lockedToPath = lockedToPath;
-		tmp.path = path; // TODO implement CreepPath::deepCopy()
+		tmp.path = path; 
 		return tmp;
 	}
 	
@@ -141,8 +126,6 @@ public class Creep extends DestructableGraphicObject{
 					return true;
 				advanceAlongPath();
 			}
-		}else{
-//			Log.v(TAG, "Advancing on no path");
 		}
 		return false;
 	}
@@ -161,8 +144,6 @@ public class Creep extends DestructableGraphicObject{
 			lockedToPath = true;
 			Log.v(TAG, "Set to valid path");
 			return true;
-		}else{
-//			Log.v(TAG, "Setting on invalid path");
 		}
 		return false;
 	}

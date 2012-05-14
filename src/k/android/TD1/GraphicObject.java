@@ -71,21 +71,6 @@ class GraphicObject{
 		cy = h/2;
 	}
 	
-//	/**
-//	 * Copy constructor - The bitmap field is <b> shallow coppied</b>
-//	 * @param src
-//	 * 	The GraphicObject that will be coppied
-//	 */
-//	GraphicObject(GraphicObject src){
-//		this(src.bitmap);
-//		x = src.x;
-//		y = src.y;
-//		cx = src.cx;
-//		cy = src.cy;
-//		dx = src.dx;
-//		dy = src.dy;
-//	}
-	
 	/**
 	 * Creates a deep copy of a GraphicObject. Deep copying of the bitmap field is 
 	 * not guaranteed
@@ -183,18 +168,6 @@ class DestructableGraphicObject extends GraphicObject{
 		super(srcBitmap);
 	}
 	
-//	/**
-//	 * Copy Constructor
-//	 * @param src
-//	 */
-//	DestructableGraphicObject(DestructableGraphicObject src){
-//		super((GraphicObject) src);
-//		m_maxHealth = src.m_maxHealth;
-//		m_health = src.m_health;
-//		m_alive = src.m_alive;
-//	}
-	
-
 	public DestructableGraphicObject deepCopy(){
 		DestructableGraphicObject tmp = (DestructableGraphicObject) super.deepCopy();
 		tmp.m_maxHealth = m_maxHealth;

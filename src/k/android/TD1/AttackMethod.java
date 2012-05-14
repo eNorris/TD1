@@ -37,27 +37,14 @@ abstract class AttackMethod{
 	}
 	
 	abstract public void drawSelf(Canvas canvas);
-	
 	abstract public AttackMethod deepCopy();
-}
-
-// TODO Just put all these in the abstract type and get rid of the interface altogether?
-interface AttackMethodInterface{
-//	public void setCreepPool(ArrayList<Creep> creeps);
-	public void attack();
-	public void findTargets();
-	public void drawSelf(Canvas canvas);
+	abstract public void attack();
+	abstract public void findTargets();
 }
 
 
 
-
-
-
-
-
-
-class LineAttackMethod extends AttackMethod implements AttackMethodInterface{
+class LineAttackMethod extends AttackMethod{
 	
 	LineAttackMethod(Tower ownerTower){
 		super(ownerTower);
@@ -97,11 +84,5 @@ class LineAttackMethod extends AttackMethod implements AttackMethodInterface{
 			tmp.targets.add(targets.get(i));
 		return tmp;
 	}
-
-//	@Override
-//	public void setCreepPool(ArrayList<Creep> creeps) {
-//		creepPool = creeps;
-//	}
-	
 }
 

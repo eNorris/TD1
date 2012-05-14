@@ -29,7 +29,6 @@ public class Tower extends DestructableGraphicObject{
 	
 	// Member Variables
 	public ArrayList<AttackMethod> attackMethods = new ArrayList<AttackMethod>();
-//	public boolean visible = true;
 	
 	public Tower(){
 		// Default
@@ -38,18 +37,6 @@ public class Tower extends DestructableGraphicObject{
 	Tower(Bitmap srcBit) {
 		super(srcBit);
 	}
-	
-//	/**
-//	 * Copy Constructor
-//	 * @param src
-//	 */
-//	Tower(Tower src){
-//		super((DestructableGraphicObject) src);
-//		visible = src.visible;
-//		attackMethods = new ArrayList<AttackMethod>();
-//		for(int i = 0; i < src.attackMethods.size(); i++)
-//			attackMethods.add(src.attackMethods.get(i).deepCopy());
-//	}
 	
 	Tower(int towerTypeId){
 		super(towerBitmapSources.get(towerTypeId)); // TODO calculate correct index
@@ -73,21 +60,6 @@ public class Tower extends DestructableGraphicObject{
 			tmp.attackMethods.add(attackMethods.get(i).deepCopy());
 		return tmp;
 	}
-	
-//	public static void loadBitmaps(int[] towerIds){
-//		if(towerIds != null)
-//			for(int i = 0; i < towerIds.length; i++)
-//				towerBitmapSources.add(BitmapFactory.decodeResource(getResources(), towerIds[i]));
-//	
-//	}
-
-//	public void setVisible(boolean v){
-//		visible = v;
-//	}
-	
-//	public boolean isVisible(){
-//		return m_visible;
-//	}
 	
 	public void setType(int towerTypeId){
 		switch (towerTypeId){
