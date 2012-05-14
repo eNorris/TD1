@@ -36,7 +36,7 @@ abstract class AttackMethod{
 		creepPool = creeps;
 	}
 	
-	abstract public void draw(Canvas canvas);
+	abstract public boolean draw(Canvas canvas);
 	abstract public AttackMethod deepCopy();
 	abstract public void attack();
 	abstract public void findTargets();
@@ -66,16 +66,24 @@ class LineAttackMethod extends AttackMethod{
 	@Override
 	public void findTargets() {
 		for(int i = 0; i < (maxTargets - targets.size()); i++){
+			float bestDist = 1000000000f;
+			int bestIndex = -1;
 			for(int j = 0; j < creepPool.size(); j++){
-				float dist = Math.sqrt(owner.x * owner.x)
+				float dist = Util.distance(owner.x, owner.y, creepPool.get(i).x, creepPool.get(i).y);
+				if(dist < bestDist && !targets.contains(creepPool.get(i))){
+					bestIndex = i;
+					bestDist = dist;
+				}
 			}
+			if(bestIndex != -1)
+				targets.add(creepPool.get(bestIndex));
 		}
 	}
 
 	@Override
-	public void draw(Canvas canvas) {
+	public boolean draw(Canvas canvas) {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
 
 	@Override

@@ -41,11 +41,12 @@ public final class R {
         public static final int valley=0x7f020018;
     }
     public static final class id {
-        public static final int headerTextView_id=0x7f060001;
-        public static final int levelSelectImg_id=0x7f060003;
-        public static final int levelSelectSpinner_id=0x7f060002;
+        public static final int headerTextView_id=0x7f060002;
+        public static final int levelSelectImg_id=0x7f060004;
+        public static final int levelSelectSpinner_id=0x7f060003;
         public static final int newTowerButton_id=0x7f060000;
-        public static final int startButton_id=0x7f060004;
+        public static final int startButton_id=0x7f060005;
+        public static final int xml_gameView_id=0x7f060001;
     }
     public static final class layout {
         public static final int core=0x7f030000;
@@ -58,5 +59,6 @@ public final class R {
         public static final int levelSelect_str=0x7f040002;
         public static final int mainHeader_str=0x7f040003;
         public static final int mainStartButton_str=0x7f040004;
+        public static final int newTower_str=0x7f040006;
     }
 }

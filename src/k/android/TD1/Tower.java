@@ -24,9 +24,9 @@ public class Tower extends DestructableGraphicObject{
 	
 	public static final String TAG = "Tower";
 	public static final int TYPE_UNDEF = -1;
-	public static final int TYPE_1 = 0;
-	public static final int TYPE_2 = 1;
-	public static final int TYPE_3 = 2;
+	public static final int TYPE_1 = 1;
+	public static final int TYPE_2 = 2;
+	public static final int TYPE_3 = 3;
 	
 	// Member Variables
 	public ArrayList<AttackMethod> attackMethods = new ArrayList<AttackMethod>();
@@ -44,18 +44,37 @@ public class Tower extends DestructableGraphicObject{
 		setType(towerTypeId);
 	}
 	
-	public Tower deepCopy(){
-		Tower tmp = new Tower();
-		tmp = (Tower) super.deepCopy();
-		attackMethods = new ArrayList<AttackMethod>();
-		for(int i = 0; i < attackMethods.size(); i++)
-			tmp.attackMethods.add(attackMethods.get(i).deepCopy());
-		return tmp;
-	}
+//	public Tower deepCopy(){
+//		Tower tmp = new Tower();
+//		tmp = (Tower) super.deepCopy();
+//		attackMethods = new ArrayList<AttackMethod>();
+//		for(int i = 0; i < attackMethods.size(); i++)
+//			tmp.attackMethods.add(attackMethods.get(i).deepCopy());
+//		return tmp;
+//	}
 	
 	public Tower shadowCopy(){
 		Tower tmp = new Tower();
-		tmp = (Tower) super.shadowCopy();
+	
+		tmp.x = x;
+		tmp.y = y;
+		tmp.cx = cx;
+		tmp.cy = cy;
+		tmp.dx = dx;
+		tmp.dy = dy;
+		tmp.w = w;
+		tmp.h = h;
+		tmp.visible = visible;
+		tmp.drawable = drawable;
+		tmp.bitmap = bitmap;
+		
+		tmp.m_maxHealth = m_maxHealth;
+		tmp.m_health = m_health;
+		tmp.m_alive = m_alive;
+		
+		// TODO fix the super.shadowCopy() inheritance issue
+		
+//		tmp = (Tower) super.shadowCopy();
 		attackMethods = new ArrayList<AttackMethod>();
 		for(int i = 0; i < attackMethods.size(); i++)
 			tmp.attackMethods.add(attackMethods.get(i).deepCopy());
@@ -63,31 +82,42 @@ public class Tower extends DestructableGraphicObject{
 	}
 	
 	public void setType(int towerTypeId){
+		drawable = true;
+		visible = true;
 		switch (towerTypeId){
 		case TYPE_1:
-			bitmap = towerBitmapSources.get(0);
+			bitmap = towerBitmapSources.get(Tower.TYPE_1);
 			attackMethods.add(new LineAttackMethod(this));
 			break;
 		case TYPE_2:
-			bitmap = towerBitmapSources.get(1);
+			bitmap = towerBitmapSources.get(Tower.TYPE_2);
 			attackMethods.add(new LineAttackMethod(this));
 			break;
 		case TYPE_3:
-			bitmap = towerBitmapSources.get(2);
+			bitmap = towerBitmapSources.get(Tower.TYPE_3);
 			attackMethods.add(new LineAttackMethod(this));
 			break;
 		default:
 			Log.e(TAG, "No towerTypeId to match " + towerTypeId);
 			break;
 		};
+		updateSize();
 	}
 	
-	public void draw(Canvas canvas){
-		if(canvas != null && drawable && bitmap != null && visible){
-			canvas.drawBitmap(bitmap, x, y, null);
-			for(int i = 0; i < attackMethods.size(); i++)
-				attackMethods.get(i).draw(canvas);
+	public boolean draw(Canvas canvas){
+		
+		if(!drawable){
+			Log.d(TAG, "trying to draw nondrawable tower");
 		}
+		if(!visible){
+			Log.d(TAG, "trying to draw nonvisible tower");
+		}
+		
+		boolean toReturn = super.draw(canvas);
+		for(int i = 0; i < attackMethods.size(); i++)
+			if(!attackMethods.get(i).draw(canvas))
+				Log.e(TAG, "AttackMethod failed to draw");
+		return toReturn;
 	}
 }
 

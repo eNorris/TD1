@@ -7,6 +7,7 @@
     <string name="mainHeader_str">Tower Defense Game 1</string>
     <string name="mainStartButton_str">Start Level</string>
     <string name="levelSelectButtonDesc_str">Shows the level that will be played</string>
+    <string name="newTower_str">New Tower</string>
     
     <string-array name="levels">
         <item>Level 1 - The Jungle</item>

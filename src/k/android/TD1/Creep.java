@@ -12,14 +12,15 @@ import android.util.Log;
  * @author Edward
  *
  */
+@SuppressWarnings("unused")
 public class Creep extends DestructableGraphicObject{
 
 	// Static Variables
 	public static ArrayList<Bitmap> creepBitmapSources;
 	public static int[] creepBitmapIds = {
-			R.drawable.tower1,
-			R.drawable.tower2,
-			R.drawable.tower3
+			R.drawable.creep1,
+			R.drawable.creep2,
+			R.drawable.creep3
 		};
 	public static final String TAG = "Creep";
 	public static final int TYPE_UNDEF = -1;
@@ -143,13 +144,15 @@ public class Creep extends DestructableGraphicObject{
 			x = path.points.get(0).x;
 			y = path.points.get(0).y;
 			lockedToPath = true;
-			Log.v(TAG, "Set to valid path");
+//			Log.v(TAG, "Set to valid path");
 			return true;
 		}
 		return false;
 	}
 	
 	public void setCreepType(int creepTypeId){
+		drawable = true;
+		visible = true;
 		switch(creepTypeId){
 		case Creep.CREEP_TYPE_1:
 			initHealth(300);
@@ -170,10 +173,6 @@ public class Creep extends DestructableGraphicObject{
 	
 	public void onDeath(){
 		// TODO do something
-	}
-	
-	public void draw(Canvas canvas){
-		canvas.drawBitmap(bitmap, x, y, null);
 	}
 }
 

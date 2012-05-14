@@ -3,6 +3,8 @@ package k.android.TD1;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.util.Log;
 
 // TODO inherit to add Movable and DMGraphicObject as well
 
@@ -20,6 +22,7 @@ import android.graphics.BitmapFactory;
  * bitmap - the Bitmap object that will be drawn <br>
  * drawable - true if the object is in a state in which drawing is legal <br>
  * visible - if true, the bitmap should be drawn as long as drawable is also true <br>
+ * TAG - String containing "GraphicObject", used for debugging <br>
  * @author Edward Noris
  *
  */
@@ -31,6 +34,7 @@ class GraphicObject{
 	public Bitmap bitmap = null;
 	public boolean drawable = false;
 	public boolean visible = true;
+	public static final String TAG = "GraphicObject";
 	
 	/**
 	 * Default Constructor <br> <br>
@@ -142,7 +146,35 @@ class GraphicObject{
 	
 	public void updateTopLeft(){
 		x = cx - w/2;
-		y = cy - h/2;
+		// TODO fix bakc to h/2
+		y = cy - h;
+	}
+	
+	public void updateSize(){
+		if(bitmap != null){
+			w = bitmap.getWidth();
+			h = bitmap.getHeight();
+		}else{
+			w = h = 0;
+		}
+	}
+	
+	/**
+	 * Ensures the object can be drawn and draws it, checks the canvas state, the bitmap state,
+	 * drawable and visible
+	 * @param canvas - The canvas to which the GraphicObject will be drawn
+	 * @return
+	 * 	True if the object was drawn, false otherwise
+	 */
+	public boolean draw(Canvas canvas){
+		if(canvas != null && drawable && bitmap!= null && visible){
+			canvas.drawBitmap(bitmap, x, y, null);
+			return true;
+		}else{
+			if(drawable && bitmap == null)
+				Log.e(TAG, "drawing null drawable GraphicObject");
+			return false;
+		}
 	}
 }
 
@@ -177,7 +209,22 @@ class DestructableGraphicObject extends GraphicObject{
 	}
 	
 	public DestructableGraphicObject shadowCopy(){
-		DestructableGraphicObject tmp = (DestructableGraphicObject) super.shadowCopy();
+		DestructableGraphicObject tmp = new DestructableGraphicObject();
+//		tmp = (DestructableGraphicObject) super.shadowCopy();
+		
+		// TODO figure out how you inherit from super.shadowCopy()
+		tmp.x = x;
+		tmp.y = y;
+		tmp.cx = cx;
+		tmp.cy = cy;
+		tmp.dx = dx;
+		tmp.dy = dy;
+		tmp.w = w;
+		tmp.h = h;
+		tmp.visible = visible;
+		tmp.drawable = drawable;
+		tmp.bitmap = bitmap;
+		
 		tmp.m_maxHealth = m_maxHealth;
 		tmp.m_health = m_health;
 		tmp.m_alive = m_alive;
@@ -293,6 +340,17 @@ class DestructableGraphicObject extends GraphicObject{
 	public void kill(){
 		m_health = 0;
 		m_alive = false;
+	}
+	
+	public boolean draw(Canvas canvas){
+		if(canvas != null && drawable && bitmap!= null && visible){
+			canvas.drawBitmap(bitmap, x, y, null);
+			return true;
+		}else{
+			if(drawable && bitmap == null)
+				Log.e(TAG, "drawing null drawable DestructableGraphicObject");
+			return false;
+		}
 	}
 	
 }
