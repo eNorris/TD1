@@ -40,9 +40,15 @@ public class Creep extends DestructableGraphicObject{
 		// Default
 	}
 	
-	public Creep(Bitmap srcBitmap, int creepType) {
+	public Creep(Bitmap srcBitmap, int creepTypeId) {
 		super(srcBitmap);
-		setCreepType(creepType);
+		setCreepType(creepTypeId);
+	}
+	
+	public Creep(int creepTypeId){
+		// TODO make sure this index is actually correct
+		super(creepBitmapSources.get(creepTypeId));
+		setCreepType(creepTypeId);
 	}
 	
 //	/**
