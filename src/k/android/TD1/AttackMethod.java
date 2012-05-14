@@ -65,8 +65,11 @@ class LineAttackMethod extends AttackMethod{
 
 	@Override
 	public void findTargets() {
-		// TODO Auto-generated method stub
-		
+		for(int i = 0; i < (maxTargets - targets.size()); i++){
+			for(int j = 0; j < creepPool.size(); j++){
+				float dist = Math.sqrt(owner.x * owner.x)
+			}
+		}
 	}
 
 	@Override
