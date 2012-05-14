@@ -36,7 +36,7 @@ abstract class AttackMethod{
 		creepPool = creeps;
 	}
 	
-	abstract public void drawSelf(Canvas canvas);
+	abstract public void draw(Canvas canvas);
 	abstract public AttackMethod deepCopy();
 	abstract public void attack();
 	abstract public void findTargets();
@@ -70,7 +70,7 @@ class LineAttackMethod extends AttackMethod{
 	}
 
 	@Override
-	public void drawSelf(Canvas canvas) {
+	public void draw(Canvas canvas) {
 		// TODO Auto-generated method stub
 		
 	}

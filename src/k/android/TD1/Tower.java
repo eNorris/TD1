@@ -3,6 +3,7 @@ package k.android.TD1;
 import java.util.ArrayList;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.util.Log;
 
 /**
@@ -79,6 +80,14 @@ public class Tower extends DestructableGraphicObject{
 			Log.e(TAG, "No towerTypeId to match " + towerTypeId);
 			break;
 		};
+	}
+	
+	public void draw(Canvas canvas){
+		if(canvas != null && drawable && bitmap != null && visible){
+			canvas.drawBitmap(bitmap, x, y, null);
+			for(int i = 0; i < attackMethods.size(); i++)
+				attackMethods.get(i).draw(canvas);
+		}
 	}
 }
 

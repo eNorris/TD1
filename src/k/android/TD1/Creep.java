@@ -2,6 +2,7 @@ package k.android.TD1;
 
 import java.util.ArrayList;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Point;
 import android.util.Log;
 
@@ -169,6 +170,10 @@ public class Creep extends DestructableGraphicObject{
 	
 	public void onDeath(){
 		// TODO do something
+	}
+	
+	public void draw(Canvas canvas){
+		canvas.drawBitmap(bitmap, x, y, null);
 	}
 }
 

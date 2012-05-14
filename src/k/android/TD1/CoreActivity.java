@@ -169,15 +169,16 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 		}
 		
 		for(int i = 0; i < m_towers.size(); i++)
-			drawTower(canvas, m_towers.get(i));
+			m_towers.get(i).draw(canvas);
 		
 		for(int i = 0; i < m_creeps.size(); i++){
 			if(m_creeps.get(i).advanceAlongPath()){
 				m_creeps.get(i).onDeath();
 				m_creeps.remove(i);
 				if(i > 0) i--;
+			}else{
+				m_creeps.get(i).draw(canvas);
 			}
-			drawCreep(canvas, m_creeps.get(i));
 		}
 	}
 
@@ -191,18 +192,18 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 //		return true;
 //	}
 	
-	public void drawTower(Canvas canvas, Tower tower){
-		if(canvas != null && tower != null && tower.bitmap != null && tower.visible){
-			canvas.drawBitmap(tower.bitmap, tower.x, tower.y, null);
-			for(int i = 0; i < tower.attackMethods.size(); i++)
-				tower.attackMethods.get(i).drawSelf(canvas);
-		}
-	}
+//	public void drawTower(Canvas canvas, Tower tower){
+//		if(canvas != null && tower != null && tower.bitmap != null && tower.visible){
+//			canvas.drawBitmap(tower.bitmap, tower.x, tower.y, null);
+//			for(int i = 0; i < tower.attackMethods.size(); i++)
+//				tower.attackMethods.get(i).drawSelf(canvas);
+//		}
+//	}
 	
-	public void drawCreep(Canvas canvas, Creep creep){
-		if(canvas != null && creep != null && creep.bitmap != null)
-			canvas.drawBitmap(creep.bitmap, creep.x, creep.y, null);
-	}
+//	public void drawCreep(Canvas canvas, Creep creep){
+//		if(canvas != null && creep != null && creep.bitmap != null)
+//			canvas.drawBitmap(creep.bitmap, creep.x, creep.y, null);
+//	}
 	
 	public void loadTowerBitmapSources(){
 		if(Tower.towerBitmapIds != null)
