@@ -3,7 +3,6 @@ package k.android.TD1;
 import java.util.ArrayList;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
 /**
@@ -22,10 +21,15 @@ public class Tower extends DestructableGraphicObject{
 			R.drawable.tower3
 		};
 	
+	public static final String TAG = "Tower";
+	public static final int TYPE_UNDEF = -1;
+	public static final int TYPE_1 = 0;
+	public static final int TYPE_2 = 1;
+	public static final int TYPE_3 = 2;
+	
+	// Member Variables
 	public ArrayList<AttackMethod> attackMethods = new ArrayList<AttackMethod>();
 	public boolean visible = true;
-	
-	public static final String TAG = "Tower";
 	
 	
 	Tower(Bitmap srcBit) {
@@ -41,7 +45,7 @@ public class Tower extends DestructableGraphicObject{
 		visible = src.visible;
 		attackMethods = new ArrayList<AttackMethod>();
 		for(int i = 0; i < src.attackMethods.size(); i++)
-			attackMethods.add(new AttackMethod(src.attackMethods.get(i)));
+			attackMethods.add(src.attackMethods.get(i).deepCopy());
 	}
 	
 	Tower(int towerTypeId){
@@ -66,91 +70,23 @@ public class Tower extends DestructableGraphicObject{
 	
 	public void setType(int towerTypeId){
 		switch (towerTypeId){
-		case 0:
+		case TYPE_1:
+			bitmap = towerBitmapSources.get(0);
+			attackMethods.add(new LineAttackMethod(this));
 			break;
-		case 1:
+		case TYPE_2:
+			bitmap = towerBitmapSources.get(1);
+			attackMethods.add(new LineAttackMethod(this));
 			break;
-		case 2:
+		case TYPE_3:
+			bitmap = towerBitmapSources.get(2);
+			attackMethods.add(new LineAttackMethod(this));
 			break;
 		default:
 			Log.e(TAG, "No towerTypeId to match " + towerTypeId);
 			break;
 		};
 	}
-}
-
-/**
- * == STRUCT == <br>
- * Allows towers to attack creeps either directly or indrectly
- * @author Edward
- *
- */
-class AttackMethod{
-	// Member Variables
-	public int power = 1;
-	public int maxTargets = 1;
-	public Tower owner;
-	public ArrayList<Creep> targets = new ArrayList<Creep>();
-	public static ArrayList<Creep> creepPool;
-	
-	public AttackMethod(Tower ownerTower){
-		owner = ownerTower;
-	}
-	
-	AttackMethod(AttackMethod src){
-		power = src.power;
-		maxTargets = src.maxTargets;
-		owner = src.owner;
-		targets = new ArrayList<Creep>();
-		for(int i = 0; i < src.targets.size(); i++){
-			targets.add(src.targets.get(i));
-		}
-	}
-	
-	public static void setCreepPool(ArrayList<Creep> creeps){
-		creepPool = creeps;
-	}
-	
-	
-}
-
-interface AttackMethodInterface{
-//	public void setCreepPool(ArrayList<Creep> creeps);
-	public void attack();
-	public void findTargets();
-}
-
-
-class LineAttackMethod extends AttackMethod implements AttackMethodInterface{
-	
-	LineAttackMethod(Tower ownerTower){
-		super(ownerTower);
-		power = 10;
-		maxTargets = 5;
-	}
-	
-	@Override
-	public void attack() {
-		for(int i = 0; i < targets.size(); i++){
-			if(targets.get(i).doDamageStrict(power))
-			{
-				targets.remove(i);
-				if(i != 0) i--;
-			}
-		}
-	}
-
-	@Override
-	public void findTargets() {
-		// TODO Auto-generated method stub
-		
-	}
-
-//	@Override
-//	public void setCreepPool(ArrayList<Creep> creeps) {
-//		creepPool = creeps;
-//	}
-	
 }
 
 

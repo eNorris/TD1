@@ -5,10 +5,29 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.util.Log;
 
+/**
+ * == STRUCT == <br>
+ * Creep class - The things towers shoot at
+ * @author Edward
+ *
+ */
 public class Creep extends DestructableGraphicObject{
 
+	// Static Variables
+	public static ArrayList<Bitmap> creepBitmapSources;
+	public static int[] creepBitmapIds = {
+//			R.drawable.creepdefault,
+			R.drawable.tower1,
+			R.drawable.tower2,
+			R.drawable.tower3
+		};
+	public static final String TAG = "Creep";
+	public static final int TYPE_UNDEF = -1;
+	public static final int CREEP_TYPE_1 = 0;
+	public static final int CREEP_TYPE_2 = 1;
+	public static final int CREEP_TYPE_3 = 2;
+	
 	// Member Variables
-	private static final String TAG = "Creep";
 	float movement = 10;
 	float movementLeft = 5;
 	float movementToGo = 1;
@@ -16,10 +35,7 @@ public class Creep extends DestructableGraphicObject{
 	boolean lockedToPath = false;
 	CreepPath path = new CreepPath();
 	
-	public static final int CREEP_TYPE_1 = 0;
-	public static final int CREEP_TYPE_2 = 1;
-	public static final int CREEP_TYPE_3 = 2;
-	
+
 	Creep(Bitmap srcBitmap, int creepType) {
 		super(srcBitmap);
 		setCreepType(creepType);
@@ -75,7 +91,7 @@ public class Creep extends DestructableGraphicObject{
 	 * @return
 	 * 	True if the creep has reached the end of the line
 	 */
-	public boolean pathAdvance(){
+	public boolean advanceAlongPath(){
 		if(lockedToPath){
 			movementLeft = movement;
 			advance();
@@ -84,7 +100,7 @@ public class Creep extends DestructableGraphicObject{
 				movementLeft = movementToGo * -1;
 				if(calcNextPoint())
 					return true;
-				pathAdvance();
+				advanceAlongPath();
 			}
 		}else{
 //			Log.v(TAG, "Advancing on no path");
