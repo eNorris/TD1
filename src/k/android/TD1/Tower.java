@@ -106,9 +106,12 @@ public class Tower extends DestructableGraphicObject{
 	
 	public boolean draw(Canvas canvas){
 		boolean toReturn = super.draw(canvas);
-		for(int i = 0; i < attackMethods.size(); i++)
+		for(int i = 0; i < attackMethods.size(); i++){
+			attackMethods.get(i).findTargets();
+			attackMethods.get(i).attack();
 			if(!attackMethods.get(i).draw(canvas))
 				Log.e(TAG, "AttackMethod failed to draw");
+		}
 		return toReturn;
 	}
 }

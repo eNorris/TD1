@@ -3,6 +3,8 @@ package k.android.TD1;
 import java.util.ArrayList;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 /**
  * == STRUCT == <br>
@@ -17,6 +19,7 @@ abstract class AttackMethod{
 	public Tower owner;
 	public ArrayList<Creep> targets = new ArrayList<Creep>();
 	public static ArrayList<Creep> creepPool;
+	public Paint paint = new Paint();
 	
 	public AttackMethod(Tower ownerTower){
 		owner = ownerTower;
@@ -82,7 +85,9 @@ class LineAttackMethod extends AttackMethod{
 
 	@Override
 	public boolean draw(Canvas canvas) {
-		// TODO Auto-generated method stub
+		paint.setColor(Color.RED);
+		for(int i = 0; i < targets.size(); i++)
+			canvas.drawLine(owner.cx, owner.cy, targets.get(i).cx, targets.get(i).cy, paint);
 		return true;
 	}
 
@@ -91,9 +96,29 @@ class LineAttackMethod extends AttackMethod{
 		LineAttackMethod tmp = new LineAttackMethod(owner);
 		tmp.power = power;
 		tmp.maxTargets = maxTargets;
-		for(int i = 0; i < targets.size(); i++)
-			tmp.targets.add(targets.get(i));
+//		for(int i = 0; i < targets.size(); i++)
+//			tmp.targets.add(targets.get(i));
+		tmp.targets = new ArrayList<Creep>();
+		tmp.paint = new Paint();
 		return tmp;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
