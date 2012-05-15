@@ -30,6 +30,7 @@ public class Tower extends DestructableGraphicObject{
 	
 	// Member Variables
 	public ArrayList<AttackMethod> attackMethods = new ArrayList<AttackMethod>();
+	public boolean active = false;
 	
 	public Tower(){
 		// Default
@@ -75,6 +76,7 @@ public class Tower extends DestructableGraphicObject{
 		// TODO fix the super.shadowCopy() inheritance issue
 		
 //		tmp = (Tower) super.shadowCopy();
+		tmp.active = active;
 		attackMethods = new ArrayList<AttackMethod>();
 		for(int i = 0; i < attackMethods.size(); i++)
 			tmp.attackMethods.add(attackMethods.get(i).deepCopy());
@@ -83,7 +85,6 @@ public class Tower extends DestructableGraphicObject{
 	
 	public void setType(int towerTypeId){
 		drawable = true;
-		visible = true;
 		switch (towerTypeId){
 		case TYPE_1:
 			bitmap = towerBitmapSources.get(Tower.TYPE_1);
@@ -105,8 +106,10 @@ public class Tower extends DestructableGraphicObject{
 	}
 	
 	public boolean draw(Canvas canvas){
+//		Log.d(TAG, "active = " + active);
 		boolean toReturn = super.draw(canvas);
 		for(int i = 0; i < attackMethods.size(); i++){
+			Log.d(TAG, "launching attacks!");
 			attackMethods.get(i).findTargets();
 			attackMethods.get(i).attack();
 			if(!attackMethods.get(i).draw(canvas))

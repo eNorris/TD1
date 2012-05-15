@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 
 /**
  * == STRUCT == <br>
@@ -49,37 +50,44 @@ abstract class AttackMethod{
 
 class LineAttackMethod extends AttackMethod{
 	
+	public static final String TAG = "AttackMethod";
+	
 	LineAttackMethod(Tower ownerTower){
 		super(ownerTower);
-		power = 10;
+		power = 100;
 		maxTargets = 5;
 	}
 	
 	@Override
 	public void attack() {
-		for(int i = 0; i < targets.size(); i++){
-			if(targets.get(i).doDamageStrict(power))
-			{
-				targets.remove(i);
-				if(i != 0) i--;
+		if(owner.active){
+			for(int i = 0; i < targets.size(); i++){
+				if(targets.get(i).doDamageStrict(power))
+				{
+					Log.d(TAG, "Killed a creep!");
+					targets.remove(i);
+					if(i != 0) i--;
+				}
 			}
 		}
 	}
 
 	@Override
 	public void findTargets() {
-		for(int i = 0; i < (maxTargets - targets.size()); i++){
-			float bestDist = 1000000000f;
-			int bestIndex = -1;
-			for(int j = 0; j < creepPool.size(); j++){
-				float dist = Util.distance(owner.x, owner.y, creepPool.get(j).x, creepPool.get(j).y);
-				if(dist < bestDist && !targets.contains(creepPool.get(j))){
-					bestIndex = j;
-					bestDist = dist;
+		if(owner.active){
+			for(int i = 0; i < (maxTargets - targets.size()); i++){
+				float bestDist = 1000000000.0f;
+				int bestIndex = -1;
+				for(int j = 0; j < creepPool.size(); j++){
+					float dist = Util.distance(owner.x, owner.y, creepPool.get(j).x, creepPool.get(j).y);
+					if(dist < bestDist && !targets.contains(creepPool.get(j))){
+						bestIndex = j;
+						bestDist = dist;
+					}
 				}
+				if(bestIndex != -1)
+					targets.add(creepPool.get(bestIndex));
 			}
-			if(bestIndex != -1)
-				targets.add(creepPool.get(bestIndex));
 		}
 	}
 
@@ -97,9 +105,9 @@ class LineAttackMethod extends AttackMethod{
 		LineAttackMethod tmp = new LineAttackMethod(owner);
 		tmp.power = power;
 		tmp.maxTargets = maxTargets;
-//		for(int i = 0; i < targets.size(); i++)
-//			tmp.targets.add(targets.get(i));
 		tmp.targets = new ArrayList<Creep>();
+		for(int i = 0; i < targets.size(); i++)
+			tmp.targets.add(targets.get(i));
 		tmp.paint = new Paint();
 		return tmp;
 	}

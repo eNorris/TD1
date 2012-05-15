@@ -35,6 +35,7 @@ public class Creep extends DestructableGraphicObject{
 	int targetPoint = 0;
 	boolean lockedToPath = false;
 	CreepPath path = new CreepPath();
+	public HealthBar healthBar;
 	
 
 	public Creep(){
@@ -44,12 +45,18 @@ public class Creep extends DestructableGraphicObject{
 	public Creep(Bitmap srcBitmap, int creepTypeId) {
 		super(srcBitmap);
 		setCreepType(creepTypeId);
+		initHealthBar();
 	}
 	
 	public Creep(int creepTypeId){
 		// TODO make sure this index is actually correct
 		super(creepBitmapSources.get(creepTypeId));
 		setCreepType(creepTypeId);
+		initHealthBar();
+	}
+	
+	public void initHealthBar(){
+		healthBar = new HealthBar(15, 10, 2, this.m_health, this.m_maxHealth);
 	}
 	
 	// Not needed, so not implemented
@@ -78,6 +85,7 @@ public class Creep extends DestructableGraphicObject{
 		tmp.targetPoint = targetPoint;
 		tmp.lockedToPath = lockedToPath;
 		tmp.path = path; 
+		tmp.healthBar = healthBar;
 		return tmp;
 	}
 	
@@ -180,6 +188,15 @@ public class Creep extends DestructableGraphicObject{
 		}
 		// The creep no longer exists in the world at all
 		GameView.worldCreepList.remove(this);
+	}
+
+	/* (non-Javadoc)
+	 * @see k.android.TD1.DestructableGraphicObject#draw(android.graphics.Canvas)
+	 */
+	@Override
+	public boolean draw(Canvas canvas) {
+		healthBar.setPos(x + 5, y - 5);
+		return (super.draw(canvas) && healthBar.draw(canvas));
 	}
 }
 

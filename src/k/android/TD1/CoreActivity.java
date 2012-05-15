@@ -23,6 +23,7 @@ import android.widget.Button;
 // FIXME firing in random places
 // FIXME dissapear bfore reachin end
 // FIXME create healthbars
+// FIXME places TWO towers instead of one <- fixed
 
 public class CoreActivity extends Activity{
 
@@ -55,16 +56,20 @@ public class CoreActivity extends Activity{
 			public boolean onTouch(View v, MotionEvent event) {
 				switch(event.getAction()){
 				case MotionEvent.ACTION_DOWN:
-					m_inputTower = new Tower(Tower.TYPE_1);
+///					m_inputTower = new Tower(Tower.TYPE_1);
+					m_inputTower.setType(Tower.TYPE_1);
 					m_inputTower.setCenter((int) event.getX(), (int) event.getY());
 					m_inputTower.drawable = true;
 					m_inputTower.visible = true;
+					m_inputTower.active = false;
 					m_floatingTower = true;
 					break;
 				case MotionEvent.ACTION_UP:
 					if(m_floatingTower){
 						Log.i(TAG, "releasing, Placing tower");
-						GameView.worldTowerList.add(m_inputTower);
+						m_inputTower.active = true;
+						GameView.worldTowerList.add(m_inputTower.shadowCopy());
+						m_inputTower.visible = false;
 						Log.i(TAG, "new size = " + GameView.worldTowerList.size());
 						m_floatingTower = false;
 					}
@@ -199,20 +204,22 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 			worldCreepList.add(tmp);
 		}
 		
+		// Redraw the world
 		if(canvas != null){
 			canvas.drawColor(Color.BLACK);
 			if(m_background != null && m_background.bitmap != null)
 				canvas.drawBitmap(m_background.bitmap, null, canvas.getClipBounds(), null);
 		}
 		
+		// draw alltowers
 		for(int i = 0; i < worldTowerList.size(); i++){
 			worldTowerList.get(i).draw(canvas);
 		}
 		
+		// update and draw all creeps
 		for(int i = 0; i < worldCreepList.size(); i++){
 			if(worldCreepList.get(i).advanceAlongPath()){
 				worldCreepList.get(i).onDeath();
-				worldCreepList.remove(i);
 				if(i > 0) i--;
 			}else{
 				worldCreepList.get(i).draw(canvas);
