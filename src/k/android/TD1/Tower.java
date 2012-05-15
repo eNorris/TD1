@@ -85,6 +85,8 @@ public class Tower extends DestructableGraphicObject{
 	
 	public void setType(int towerTypeId){
 		drawable = true;
+		attackMethods.clear();
+		
 		switch (towerTypeId){
 		case TYPE_1:
 			bitmap = towerBitmapSources.get(Tower.TYPE_1);
@@ -109,11 +111,13 @@ public class Tower extends DestructableGraphicObject{
 //		Log.d(TAG, "active = " + active);
 		boolean toReturn = super.draw(canvas);
 		for(int i = 0; i < attackMethods.size(); i++){
-			Log.d(TAG, "launching attacks!");
-			attackMethods.get(i).findTargets();
-			attackMethods.get(i).attack();
-			if(!attackMethods.get(i).draw(canvas))
+//			Log.d(TAG, "launching attacks!");
+//			attackMethods.get(i).findTargets();
+//			attackMethods.get(i).attack();
+			if(!attackMethods.get(i).draw(canvas)){
+				toReturn = false;
 				Log.e(TAG, "AttackMethod failed to draw");
+			}
 		}
 		return toReturn;
 	}

@@ -58,6 +58,9 @@ public class CoreActivity extends Activity{
 				case MotionEvent.ACTION_DOWN:
 ///					m_inputTower = new Tower(Tower.TYPE_1);
 					m_inputTower.setType(Tower.TYPE_1);
+					
+					Log.d(TAG, "@actiondown: inputtowerSize = " + m_inputTower.attackMethods.size());
+					
 					m_inputTower.setCenter((int) event.getX(), (int) event.getY());
 					m_inputTower.drawable = true;
 					m_inputTower.visible = true;
@@ -118,22 +121,9 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 	public GameView(Context context) {
 		super(context);
 		initGameView();
-//		getHolder().addCallback(this);
-//		m_gameThread = new GameThread(getHolder(), this);
-//		setFocusable(true);
-//		m_level = MainActivity.m_level;
-//		m_bgId = getBgResId();
-//		AttackMethod.creepPool = worldCreepList;
 	}
 	
 	public GameView(Context context,  AttributeSet attrs) {
-//		super(context, attrs);
-//		getHolder().addCallback(this);
-//		m_gameThread = new GameThread(getHolder(), this);
-//		setFocusable(true);
-//		m_level = MainActivity.m_level;
-//		m_bgId = getBgResId();
-//		AttackMethod.creepPool = worldCreepList;
 		super(context, attrs);
 		initGameView();
 	}
@@ -141,12 +131,6 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 	public GameView(Context context,  AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		initGameView();
-//		getHolder().addCallback(this);
-//		m_gameThread = new GameThread(getHolder(), this);
-//		setFocusable(true);
-//		m_level = MainActivity.m_level;
-//		m_bgId = getBgResId();
-//		AttackMethod.creepPool = worldCreepList;
 	}
 	
 	private void initGameView(){
@@ -196,12 +180,8 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 	// Member Functions
 	public void onDraw(Canvas canvas){
 		
-		// May add more creeps
-		if(m_random.nextInt() % 10 == 0){
-			int tmpRand = m_random.nextInt(3);
-			Creep tmp = new Creep(tmpRand);
-			tmp.setOnPath(worldPathList.get(m_random.nextInt(10)));
-			worldCreepList.add(tmp);
+		if(!updateGameState()){
+			Log.e(TAG, "Failed to update game state!");
 		}
 		
 		// Redraw the world
@@ -212,21 +192,47 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 		}
 		
 		// draw alltowers
-		for(int i = 0; i < worldTowerList.size(); i++){
+		for(int i = 0; i < worldTowerList.size(); i++)
 			worldTowerList.get(i).draw(canvas);
-		}
 		
 		// update and draw all creeps
+		for(int i = 0; i < worldCreepList.size(); i++)
+			worldCreepList.get(i).draw(canvas);
+		
+		CoreActivity.m_inputTower.draw(canvas);
+	}
+	
+	public boolean updateGameState(){
+		boolean toReturn = true;
+		
+		// Add some more creeps
+		if(m_random.nextInt() % 10 == 0){
+			int tmpRand = m_random.nextInt(3);
+			Creep tmp = new Creep(tmpRand);
+			tmp.setOnPath(worldPathList.get(m_random.nextInt(10)));
+			worldCreepList.add(tmp);
+		}
+		
+		// Update creep positions and kill some off
 		for(int i = 0; i < worldCreepList.size(); i++){
 			if(worldCreepList.get(i).advanceAlongPath()){
 				worldCreepList.get(i).onDeath();
 				if(i > 0) i--;
-			}else{
-				worldCreepList.get(i).draw(canvas);
 			}
 		}
 		
-		CoreActivity.m_inputTower.draw(canvas);
+		// Update Tower Attack Methods
+		Log.v(TAG, "@update: wtowersize = " + worldTowerList.size());
+		for(int i = 0; i < worldTowerList.size(); i++){
+			Log.v(TAG, "@update: atksize = " + worldTowerList.get(i).attackMethods.size()); 
+			for(int j = 0; j < worldTowerList.get(i).attackMethods.size(); j++){
+				Log.v(TAG, "launching attacks!");
+				worldTowerList.get(i).attackMethods.get(j).findTargets();
+				worldTowerList.get(i).attackMethods.get(j).attack();
+			}
+		}
+		
+		return toReturn;
 	}
 	
 	public void loadBackgroundSourceBitmap(int backgroundId){
