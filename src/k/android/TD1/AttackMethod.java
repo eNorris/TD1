@@ -72,9 +72,9 @@ class LineAttackMethod extends AttackMethod{
 			float bestDist = 1000000000f;
 			int bestIndex = -1;
 			for(int j = 0; j < creepPool.size(); j++){
-				float dist = Util.distance(owner.x, owner.y, creepPool.get(i).x, creepPool.get(i).y);
-				if(dist < bestDist && !targets.contains(creepPool.get(i))){
-					bestIndex = i;
+				float dist = Util.distance(owner.x, owner.y, creepPool.get(j).x, creepPool.get(j).y);
+				if(dist < bestDist && !targets.contains(creepPool.get(j))){
+					bestIndex = j;
 					bestDist = dist;
 				}
 			}
@@ -87,7 +87,8 @@ class LineAttackMethod extends AttackMethod{
 	public boolean draw(Canvas canvas) {
 		paint.setColor(Color.RED);
 		for(int i = 0; i < targets.size(); i++)
-			canvas.drawLine(owner.cx, owner.cy, targets.get(i).cx, targets.get(i).cy, paint);
+			if(canvas != null)
+				canvas.drawLine(owner.cx, owner.cy, targets.get(i).cx, targets.get(i).cy, paint);
 		return true;
 	}
 

@@ -172,7 +172,14 @@ public class Creep extends DestructableGraphicObject{
 	}
 	
 	public void onDeath(){
-		// TODO do something
+		// The creep can no longer be trargeted
+		for(int i = 0; i < GameView.worldTowerList.size(); i++){
+			for(int j = 0; j < GameView.worldTowerList.get(i).attackMethods.size(); j++){
+				GameView.worldTowerList.get(i).attackMethods.get(j).targets.remove(this);
+			}
+		}
+		// The creep no longer exists in the world at all
+		GameView.worldCreepList.remove(this);
 	}
 }
 

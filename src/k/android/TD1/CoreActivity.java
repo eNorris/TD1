@@ -20,6 +20,9 @@ import android.view.View;
 import android.widget.Button;
 
 // FIXME CoreActivity.m_gameView is not the same gameview rendering....
+// FIXME firing in random places
+// FIXME dissapear bfore reachin end
+// FIXME create healthbars
 
 public class CoreActivity extends Activity{
 
@@ -43,7 +46,7 @@ public class CoreActivity extends Activity{
 		setContentView(R.layout.core);
 		
 		// Realize elements
-		final GameView gameView = (GameView) findViewById(R.id.xml_gameView_id);
+//		final GameView gameView = (GameView) findViewById(R.id.xml_gameView_id);
 		final Button newTowerButton = (Button) findViewById(R.id.newTowerButton_id);
 		
 		// set onClick methods for buttons
@@ -61,8 +64,8 @@ public class CoreActivity extends Activity{
 				case MotionEvent.ACTION_UP:
 					if(m_floatingTower){
 						Log.i(TAG, "releasing, Placing tower");
-						gameView.m_towers.add(m_inputTower);
-						Log.i(TAG, "new size = " + gameView.m_towers.size());
+						GameView.worldTowerList.add(m_inputTower);
+						Log.i(TAG, "new size = " + GameView.worldTowerList.size());
 						m_floatingTower = false;
 					}
 					break;
@@ -97,10 +100,9 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 	private int m_level = LevelCode.UNKNOWN_LEVEL;
 	private GameThread m_gameThread;
 	private GraphicObject m_background;
-	// TODO either structure or privatize everything
-	protected ArrayList<Tower> m_towers = new ArrayList<Tower>();
-	private ArrayList<Creep> m_creeps = new ArrayList<Creep>();
-	private ArrayList<CreepPath> m_paths = new ArrayList<CreepPath>();
+	public static ArrayList<Tower> worldTowerList = new ArrayList<Tower>();
+	public static ArrayList<Creep> worldCreepList = new ArrayList<Creep>();
+	public static ArrayList<CreepPath> worldPathList = new ArrayList<CreepPath>();
 	private Random m_random = new Random();
 	
 	private static final String TAG = "GameView";
@@ -110,29 +112,45 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 	// Constructors
 	public GameView(Context context) {
 		super(context);
-		getHolder().addCallback(this);
-		m_gameThread = new GameThread(getHolder(), this);
-		setFocusable(true);
-		m_level = MainActivity.m_level;
-		m_bgId = getBgResId();
+		initGameView();
+//		getHolder().addCallback(this);
+//		m_gameThread = new GameThread(getHolder(), this);
+//		setFocusable(true);
+//		m_level = MainActivity.m_level;
+//		m_bgId = getBgResId();
+//		AttackMethod.creepPool = worldCreepList;
 	}
 	
 	public GameView(Context context,  AttributeSet attrs) {
+//		super(context, attrs);
+//		getHolder().addCallback(this);
+//		m_gameThread = new GameThread(getHolder(), this);
+//		setFocusable(true);
+//		m_level = MainActivity.m_level;
+//		m_bgId = getBgResId();
+//		AttackMethod.creepPool = worldCreepList;
 		super(context, attrs);
-		getHolder().addCallback(this);
-		m_gameThread = new GameThread(getHolder(), this);
-		setFocusable(true);
-		m_level = MainActivity.m_level;
-		m_bgId = getBgResId();
+		initGameView();
 	}
 	
 	public GameView(Context context,  AttributeSet attrs, int defStyle) {
-		super(context, attrs);
+		super(context, attrs, defStyle);
+		initGameView();
+//		getHolder().addCallback(this);
+//		m_gameThread = new GameThread(getHolder(), this);
+//		setFocusable(true);
+//		m_level = MainActivity.m_level;
+//		m_bgId = getBgResId();
+//		AttackMethod.creepPool = worldCreepList;
+	}
+	
+	private void initGameView(){
 		getHolder().addCallback(this);
 		m_gameThread = new GameThread(getHolder(), this);
 		setFocusable(true);
 		m_level = MainActivity.m_level;
 		m_bgId = getBgResId();
+		AttackMethod.creepPool = worldCreepList;
 	}
 
 	// Surface Functions
@@ -149,7 +167,7 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 			m_gameThread.start();
 		}
 		
-		initPaths(m_paths);
+		initPaths(worldPathList);
 	}
 	
 	@Override
@@ -177,8 +195,8 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 		if(m_random.nextInt() % 10 == 0){
 			int tmpRand = m_random.nextInt(3);
 			Creep tmp = new Creep(tmpRand);
-			tmp.setOnPath(m_paths.get(m_random.nextInt(10)));
-			m_creeps.add(tmp);
+			tmp.setOnPath(worldPathList.get(m_random.nextInt(10)));
+			worldCreepList.add(tmp);
 		}
 		
 		if(canvas != null){
@@ -187,17 +205,17 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 				canvas.drawBitmap(m_background.bitmap, null, canvas.getClipBounds(), null);
 		}
 		
-		for(int i = 0; i < m_towers.size(); i++){
-			m_towers.get(i).draw(canvas);
+		for(int i = 0; i < worldTowerList.size(); i++){
+			worldTowerList.get(i).draw(canvas);
 		}
 		
-		for(int i = 0; i < m_creeps.size(); i++){
-			if(m_creeps.get(i).advanceAlongPath()){
-				m_creeps.get(i).onDeath();
-				m_creeps.remove(i);
+		for(int i = 0; i < worldCreepList.size(); i++){
+			if(worldCreepList.get(i).advanceAlongPath()){
+				worldCreepList.get(i).onDeath();
+				worldCreepList.remove(i);
 				if(i > 0) i--;
 			}else{
-				m_creeps.get(i).draw(canvas);
+				worldCreepList.get(i).draw(canvas);
 			}
 		}
 		

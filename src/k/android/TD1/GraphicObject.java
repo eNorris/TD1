@@ -146,8 +146,7 @@ class GraphicObject{
 	
 	public void updateTopLeft(){
 		x = cx - w/2;
-		// TODO fix bakc to h/2
-		y = cy - h;
+		y = cy - h/2;
 	}
 	
 	public void updateSize(){
