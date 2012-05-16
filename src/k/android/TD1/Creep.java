@@ -12,7 +12,6 @@ import android.util.Log;
  * @author Edward
  *
  */
-@SuppressWarnings("unused")
 public class Creep extends DestructableGraphicObject{
 
 	// Static Variables
@@ -49,14 +48,13 @@ public class Creep extends DestructableGraphicObject{
 	}
 	
 	public Creep(int creepTypeId){
-		// TODO make sure this index is actually correct
 		super(creepBitmapSources.get(creepTypeId));
 		setCreepType(creepTypeId);
 		initHealthBar();
 	}
 	
 	public void initHealthBar(){
-		healthBar = new HealthBar(15, 10, 2, this.m_health, this.m_maxHealth);
+		healthBar = new HealthBar(30, 5, 1, this.m_health, this.m_maxHealth);
 	}
 	
 	// Not needed, so not implemented
@@ -72,22 +70,22 @@ public class Creep extends DestructableGraphicObject{
 //		return tmp;
 //	}
 	
-	/**
-	 * <b> Shadow on Bitmap:bitmap <br>
-	 * Shadow on CreepPath:path </b>
-	 */
-	public Creep shadowCopy(){
-		Creep tmp = new Creep();
-		tmp = (Creep) super.deepCopy();
-		tmp.movement = movement;
-		tmp.movementLeft = movementLeft;
-		tmp.movementToGo = movementToGo;
-		tmp.targetPoint = targetPoint;
-		tmp.lockedToPath = lockedToPath;
-		tmp.path = path; 
-		tmp.healthBar = healthBar;
-		return tmp;
-	}
+//	/**
+//	 * <b> Shadow on Bitmap:bitmap <br>
+//	 * Shadow on CreepPath:path </b>
+//	 */
+//	public Creep shadowCopy(){
+//		Creep tmp = new Creep();
+//		tmp = (Creep) super.deepCopy();
+//		tmp.movement = movement;
+//		tmp.movementLeft = movementLeft;
+//		tmp.movementToGo = movementToGo;
+//		tmp.targetPoint = targetPoint;
+//		tmp.lockedToPath = lockedToPath;
+//		tmp.path = path; 
+//		tmp.healthBar = healthBar;
+//		return tmp;
+//	}
 	
 	/**
 	 * 
@@ -149,8 +147,9 @@ public class Creep extends DestructableGraphicObject{
 	public boolean setOnPath(CreepPath spath){
 		if(spath != null && spath.isValid()){
 			path = spath;
-			x = path.points.get(0).x;
-			y = path.points.get(0).y;
+			setCenter(path.points.get(0).x, path.points.get(0).y);
+//			x = path.points.get(0).x;
+//			y = path.points.get(0).y;
 			lockedToPath = true;
 //			Log.v(TAG, "Set to valid path");
 			return true;
@@ -180,6 +179,7 @@ public class Creep extends DestructableGraphicObject{
 	}
 	
 	public void onDeath(){
+		Log.v(TAG, "@onDeath: calling");
 		// The creep can no longer be trargeted
 		for(int i = 0; i < GameView.worldTowerList.size(); i++){
 			for(int j = 0; j < GameView.worldTowerList.get(i).attackMethods.size(); j++){
@@ -190,9 +190,6 @@ public class Creep extends DestructableGraphicObject{
 		GameView.worldCreepList.remove(this);
 	}
 
-	/* (non-Javadoc)
-	 * @see k.android.TD1.DestructableGraphicObject#draw(android.graphics.Canvas)
-	 */
 	@Override
 	public boolean draw(Canvas canvas) {
 		healthBar.setPos(x + 5, y - 5);

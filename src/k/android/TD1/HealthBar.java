@@ -21,6 +21,8 @@ public class HealthBar {
 	
 	public int x, y, w, h, border, health, maxHealth;
 	
+	public static final String TAG = "HealthBar";
+	
 	public HealthBar(int width, int height, int borderWidth, int currentHealth, int maximumHealth){
 		health = currentHealth;
 		maxHealth = maximumHealth;
@@ -46,9 +48,12 @@ public class HealthBar {
 		
 		healthRect.left = x;
 		if(maxHealth != 0)
-			healthRect.right = (x + w) * (health/maxHealth);
+			healthRect.right = x + (int)((float)w * (float)health/(float)maxHealth);
 		else
 			healthRect.right = x;
+		
+///		Log.d(TAG, "draw: left =" + healthRect.left + " right = " + healthRect.right);
+		
 		healthRect.top = y;
 		healthRect.bottom = y + h;
 		canvas.drawRect(healthRect, healthPaint);
@@ -68,6 +73,7 @@ public class HealthBar {
 	
 	public void updateCurrentHealth(int newCurrentHealth){
 		health = newCurrentHealth;
+//		Log.d(TAG, "updated to " + health);
 	}
 	
 }

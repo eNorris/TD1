@@ -19,10 +19,10 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 
-// FIXME CoreActivity.m_gameView is not the same gameview rendering....
-// FIXME firing in random places
+// FIXME CoreActivity.m_gameView is not the same gameview rendering.... <- fixec
+// FIXME firing in random places <- fixed
 // FIXME dissapear bfore reachin end
-// FIXME create healthbars
+// FIXME create healthbars <- done
 // FIXME places TWO towers instead of one <- fixed
 
 public class CoreActivity extends Activity{
@@ -71,6 +71,8 @@ public class CoreActivity extends Activity{
 					if(m_floatingTower){
 						Log.i(TAG, "releasing, Placing tower");
 						m_inputTower.active = true;
+						Log.d(TAG, "@MotionEvent.up: atksize = " + m_inputTower.attackMethods.size());
+						
 						GameView.worldTowerList.add(m_inputTower.shadowCopy());
 						m_inputTower.visible = false;
 						Log.i(TAG, "new size = " + GameView.worldTowerList.size());
@@ -110,12 +112,16 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 	private GraphicObject m_background;
 	public static ArrayList<Tower> worldTowerList = new ArrayList<Tower>();
 	public static ArrayList<Creep> worldCreepList = new ArrayList<Creep>();
-	public static ArrayList<CreepPath> worldPathList = new ArrayList<CreepPath>();
+	public static ArrayList<CreepPath> worldPathList;
 	private Random m_random = new Random();
 	
 	private static final String TAG = "GameView";
 	
 	private int m_bgId = R.drawable.choose;
+	
+	public static int playerMoney = 0;
+	public static int playerHealth = 1;
+	public static String playerName = "Unknown Player";
 
 	// Constructors
 	public GameView(Context context) {
@@ -140,6 +146,10 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 		m_level = MainActivity.m_level;
 		m_bgId = getBgResId();
 		AttackMethod.creepPool = worldCreepList;
+		
+		playerMoney = 2500;
+		playerHealth = 2500;
+		playerName = "Edward";
 	}
 
 	// Surface Functions
@@ -156,7 +166,7 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 			m_gameThread.start();
 		}
 		
-		initPaths(worldPathList);
+		initPaths();
 	}
 	
 	@Override
@@ -199,10 +209,26 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 		for(int i = 0; i < worldCreepList.size(); i++)
 			worldCreepList.get(i).draw(canvas);
 		
+		// Draw attack methods
+		for(int i = 0; i < worldTowerList.size(); i++)
+			for(int j = 0; j < worldTowerList.get(i).attackMethods.size(); j++)
+				worldTowerList.get(i).attackMethods.get(j).draw(canvas);
+		
 		CoreActivity.m_inputTower.draw(canvas);
 	}
 	
 	public boolean updateGameState(){
+		
+		if(worldPathList == null){
+			Log.e(TAG, "world path is null");
+			return false;
+		}
+		
+		if(worldPathList.size() == 0){
+			Log.wtf(TAG,  "Just blow up!");
+			throw new RuntimeException();
+		}
+		
 		boolean toReturn = true;
 		
 		// Add some more creeps
@@ -214,19 +240,27 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 		}
 		
 		// Update creep positions and kill some off
+//		Log.d(TAG, " == Creep Dump ==");
 		for(int i = 0; i < worldCreepList.size(); i++){
+			
+//			Log.d(TAG, "Creep " + i + ": " + worldCreepList.get(i).m_health + "/" + worldCreepList.get(i).m_maxHealth);
+			
 			if(worldCreepList.get(i).advanceAlongPath()){
 				worldCreepList.get(i).onDeath();
+				Log.d(TAG,  "creep hit end of the line and died");
 				if(i > 0) i--;
+			}else{
+				worldCreepList.get(i).healthBar.updateCurrentHealth(worldCreepList.get(i).m_health);
 			}
 		}
+//		Log.d(TAG, " -- DONE.");
 		
 		// Update Tower Attack Methods
-		Log.v(TAG, "@update: wtowersize = " + worldTowerList.size());
+//		Log.v(TAG, "@update: wtowersize = " + worldTowerList.size());
 		for(int i = 0; i < worldTowerList.size(); i++){
-			Log.v(TAG, "@update: atksize = " + worldTowerList.get(i).attackMethods.size()); 
+//			Log.v(TAG, "@update: atksize = " + worldTowerList.get(i).attackMethods.size()); 
 			for(int j = 0; j < worldTowerList.get(i).attackMethods.size(); j++){
-				Log.v(TAG, "launching attacks!");
+//				Log.v(TAG, "launching attacks!");
 				worldTowerList.get(i).attackMethods.get(j).findTargets();
 				worldTowerList.get(i).attackMethods.get(j).attack();
 			}
@@ -271,13 +305,15 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 		}
 	}
 	
-	public void initPaths(ArrayList<CreepPath> paths){
+	public void initPaths(){
+		Log.d(TAG, "running path gen");
+		worldPathList = new ArrayList<CreepPath>();
 		for(int i = 0; i < 10; i++){
 			CreepPath tmp = new CreepPath();
 			if(this.getHeight() != 0){
 				tmp.addPoint(new Point(-20, Math.abs(m_random.nextInt()) % this.getHeight()));
 				tmp.addPoint(new Point(this.getWidth() + 20, Math.abs(m_random.nextInt()) % this.getHeight()));
-				paths.add(tmp);
+				worldPathList.add(tmp);
 			}else{
 				Log.v(TAG, "Height/Width is zero!!!");
 			}

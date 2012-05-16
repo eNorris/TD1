@@ -82,7 +82,6 @@ class GraphicObject{
 	 * 	A deep copy of the calling object
 	 */
 	public GraphicObject deepCopy(){
-		// TODO test
 		GraphicObject tmp = new GraphicObject();
 		tmp.x = x;
 		tmp.y = y;
@@ -199,37 +198,6 @@ class DestructableGraphicObject extends GraphicObject{
 		super(srcBitmap);
 	}
 	
-	public DestructableGraphicObject deepCopy(){
-		DestructableGraphicObject tmp = (DestructableGraphicObject) super.deepCopy();
-		tmp.m_maxHealth = m_maxHealth;
-		tmp.m_health = m_health;
-		tmp.m_alive = m_alive;
-		return tmp;
-	}
-	
-	public DestructableGraphicObject shadowCopy(){
-		DestructableGraphicObject tmp = new DestructableGraphicObject();
-//		tmp = (DestructableGraphicObject) super.shadowCopy();
-		
-		// TODO figure out how you inherit from super.shadowCopy()
-		tmp.x = x;
-		tmp.y = y;
-		tmp.cx = cx;
-		tmp.cy = cy;
-		tmp.dx = dx;
-		tmp.dy = dy;
-		tmp.w = w;
-		tmp.h = h;
-		tmp.visible = visible;
-		tmp.drawable = drawable;
-		tmp.bitmap = bitmap;
-		
-		tmp.m_maxHealth = m_maxHealth;
-		tmp.m_health = m_health;
-		tmp.m_alive = m_alive;
-		return tmp;
-	}
-	
 	/**
 	 * Initializes an objects health, both maxHealth and health are set to the 
 	 * provided parameter
@@ -244,18 +212,20 @@ class DestructableGraphicObject extends GraphicObject{
 	
 	/**
 	 * Sets an objects maxHealth. Must be greater than zero
-	 * @param maxHealth
+	 * @param maximumHealth
 	 * 	The value maxHealth will be set to - if zero or less, maxHealth will be 
 	 * 	set to 1 instead and false will be returned.
 	 * @return
 	 * 	True if maxHealth was set the the variable sent, false if it was defaulted to 1
 	 */
-	public boolean setMaxHealth(int maxHealth){
-		if(maxHealth > 0){
-			m_maxHealth = maxHealth;
+	public boolean setMaxHealth(int maximumHealth){
+		if(maximumHealth > 0){
+			m_maxHealth = maximumHealth;
 			return true;
 		}else{
 			m_maxHealth = 1;
+			Log.wtf(TAG,  "This should never happen!");
+			x = y/0;
 			return false;
 		}
 	}
@@ -286,7 +256,7 @@ class DestructableGraphicObject extends GraphicObject{
 		int correctedDamage = damageDone < 0 ? 0 : damageDone;
 		m_health -= correctedDamage;
 		m_health = m_health < 0 ? 0 : m_health;
-		return checkAlive();
+		return !checkAlive();
 	}
 	
 	/**
@@ -301,7 +271,7 @@ class DestructableGraphicObject extends GraphicObject{
 		int correctedHeal = healDone < 0 ? 0 : healDone;
 		m_health -= correctedHeal;
 		m_health = m_health > m_maxHealth ? m_maxHealth : m_health;
-		return checkAlive();
+		return !checkAlive();
 	}
 	
 	/**
@@ -331,6 +301,15 @@ class DestructableGraphicObject extends GraphicObject{
 		else
 			m_alive = false;
 		return m_alive;
+	}
+	
+	/**
+	 * Added for convenience
+	 * @return
+	 * The negation of checkAlive()
+	 */
+	public boolean checkDead(){
+		return !checkAlive();
 	}
 	
 	/**

@@ -56,7 +56,6 @@ public class Tower extends DestructableGraphicObject{
 	
 	public Tower shadowCopy(){
 		Tower tmp = new Tower();
-	
 		tmp.x = x;
 		tmp.y = y;
 		tmp.cx = cx;
@@ -68,18 +67,14 @@ public class Tower extends DestructableGraphicObject{
 		tmp.visible = visible;
 		tmp.drawable = drawable;
 		tmp.bitmap = bitmap;
-		
 		tmp.m_maxHealth = m_maxHealth;
 		tmp.m_health = m_health;
 		tmp.m_alive = m_alive;
-		
-		// TODO fix the super.shadowCopy() inheritance issue
-		
-//		tmp = (Tower) super.shadowCopy();
 		tmp.active = active;
-		attackMethods = new ArrayList<AttackMethod>();
-		for(int i = 0; i < attackMethods.size(); i++)
+		tmp.attackMethods = new ArrayList<AttackMethod>();
+		for(int i = 0; i < attackMethods.size(); i++){
 			tmp.attackMethods.add(attackMethods.get(i).deepCopy());
+		}
 		return tmp;
 	}
 	
@@ -109,17 +104,17 @@ public class Tower extends DestructableGraphicObject{
 	
 	public boolean draw(Canvas canvas){
 //		Log.d(TAG, "active = " + active);
-		boolean toReturn = super.draw(canvas);
-		for(int i = 0; i < attackMethods.size(); i++){
+///		boolean toReturn = super.draw(canvas);
+//		for(int i = 0; i < attackMethods.size(); i++){
 //			Log.d(TAG, "launching attacks!");
 //			attackMethods.get(i).findTargets();
 //			attackMethods.get(i).attack();
-			if(!attackMethods.get(i).draw(canvas)){
-				toReturn = false;
-				Log.e(TAG, "AttackMethod failed to draw");
-			}
-		}
-		return toReturn;
+//			if(!attackMethods.get(i).draw(canvas)){
+//				toReturn = false;
+//				Log.e(TAG, "AttackMethod failed to draw");
+//			}
+///		}
+		return super.draw(canvas);
 	}
 }
 

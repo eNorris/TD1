@@ -54,7 +54,7 @@ class LineAttackMethod extends AttackMethod{
 	
 	LineAttackMethod(Tower ownerTower){
 		super(ownerTower);
-		power = 100;
+		power = 10;
 		maxTargets = 5;
 	}
 	
@@ -64,8 +64,9 @@ class LineAttackMethod extends AttackMethod{
 			for(int i = 0; i < targets.size(); i++){
 				if(targets.get(i).doDamageStrict(power))
 				{
-					Log.d(TAG, "Killed a creep!");
-					targets.remove(i);
+//					Log.d(TAG, "Killed a creep!");
+					targets.get(i).onDeath();
+//					targets.remove(i);
 					if(i != 0) i--;
 				}
 			}
