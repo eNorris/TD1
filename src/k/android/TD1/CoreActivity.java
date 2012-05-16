@@ -18,6 +18,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 // FIXME CoreActivity.m_gameView is not the same gameview rendering.... <- fixec
 // FIXME firing in random places <- fixed
@@ -32,6 +33,10 @@ public class CoreActivity extends Activity{
 //	public static GameView m_gameView;
 	static protected Tower m_inputTower = null;
 	protected static boolean m_floatingTower = false;
+	
+	public static TextView playerNameTextView;
+	public static TextView playerHealthTextView;
+	public static TextView playerMoneyTextView;
 		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,14 @@ public class CoreActivity extends Activity{
 		// Realize elements
 //		final GameView gameView = (GameView) findViewById(R.id.xml_gameView_id);
 		final Button newTowerButton = (Button) findViewById(R.id.newTowerButton_id);
+		playerNameTextView = (TextView) findViewById(R.id.corePlayerName_id);
+		playerMoneyTextView = (TextView) findViewById(R.id.corePlayerMoney_id);
+		playerHealthTextView = (TextView) findViewById(R.id.corePlayerHealth_id);
+		
+		playerNameTextView.setText(GameView.playerName);
+		playerMoneyTextView.setText(new Integer(GameView.playerMoney).toString());
+		playerHealthTextView.setText(new Integer(GameView.playerHealth).toString());
+		
 		
 		// set onClick methods for buttons
 		newTowerButton.setOnTouchListener(new View.OnTouchListener(){
@@ -99,6 +112,10 @@ public class CoreActivity extends Activity{
 		if(Creep.creepBitmapIds != null)
 			for(int i = 0; i < Creep.creepBitmapIds.length; i++)
 				Creep.creepBitmapSources.add(BitmapFactory.decodeResource(getResources(), Creep.creepBitmapIds[i]));
+	}
+	
+	public static void setPlayerHealth(int health){
+		playerHealthTextView.setText(new Integer(health).toString());
 	}
 }
 
@@ -214,7 +231,9 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 			for(int j = 0; j < worldTowerList.get(i).attackMethods.size(); j++)
 				worldTowerList.get(i).attackMethods.get(j).draw(canvas);
 		
-		CoreActivity.m_inputTower.draw(canvas);
+		
+		if(CoreActivity.m_inputTower != null)
+			CoreActivity.m_inputTower.draw(canvas);
 	}
 	
 	public boolean updateGameState(){
@@ -247,7 +266,7 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 			
 			if(worldCreepList.get(i).advanceAlongPath()){
 				worldCreepList.get(i).onDeath();
-				Log.d(TAG,  "creep hit end of the line and died");
+//				Log.d(TAG,  "creep hit end of the line and died");
 				if(i > 0) i--;
 			}else{
 				worldCreepList.get(i).healthBar.updateCurrentHealth(worldCreepList.get(i).m_health);
@@ -264,6 +283,17 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 				worldTowerList.get(i).attackMethods.get(j).findTargets();
 				worldTowerList.get(i).attackMethods.get(j).attack();
 			}
+		}
+		
+		// Update player info
+		// TODO
+//		CoreActivity.playerMoneyTextView.setText(new Integer(GameView.playerMoney).toString());
+//		CoreActivity.playerHealthTextView.setText(new Integer(GameView.playerHealth).toString());
+		
+		
+		
+		if(playerHealth <= 0){
+			loseGame();
 		}
 		
 		return toReturn;
@@ -318,6 +348,14 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 				Log.v(TAG, "Height/Width is zero!!!");
 			}
 		}
+	}
+	
+	public void loseGame(){
+		// TODO
+	}
+	
+	public void winGame(){
+		// TODO
 	}
 }
 

@@ -31,6 +31,7 @@ public class Tower extends DestructableGraphicObject{
 	// Member Variables
 	public ArrayList<AttackMethod> attackMethods = new ArrayList<AttackMethod>();
 	public boolean active = false;
+	public int cost = 100;
 	
 	public Tower(){
 		// Default
@@ -41,7 +42,7 @@ public class Tower extends DestructableGraphicObject{
 	}
 	
 	Tower(int towerTypeId){
-		super(towerBitmapSources.get(towerTypeId)); // TODO calculate correct index
+		super(towerBitmapSources.get(towerTypeId));
 		setType(towerTypeId);
 	}
 	

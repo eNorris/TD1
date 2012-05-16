@@ -179,7 +179,8 @@ public class Creep extends DestructableGraphicObject{
 	}
 	
 	public void onDeath(){
-		Log.v(TAG, "@onDeath: calling");
+		GameView.playerHealth -= this.m_health;
+//		Log.v(TAG, "@onDeath: calling");
 		// The creep can no longer be trargeted
 		for(int i = 0; i < GameView.worldTowerList.size(); i++){
 			for(int j = 0; j < GameView.worldTowerList.get(i).attackMethods.size(); j++){
