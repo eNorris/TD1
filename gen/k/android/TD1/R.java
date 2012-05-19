@@ -34,11 +34,14 @@ public final class R {
         public static final int plateau=0x7f020011;
         public static final int swamp=0x7f020012;
         public static final int tower1=0x7f020013;
-        public static final int tower2=0x7f020014;
-        public static final int tower3=0x7f020015;
-        public static final int towerdefault=0x7f020016;
-        public static final int tundra=0x7f020017;
-        public static final int valley=0x7f020018;
+        public static final int tower1_grayed=0x7f020014;
+        public static final int tower2=0x7f020015;
+        public static final int tower2_grayed=0x7f020016;
+        public static final int tower3=0x7f020017;
+        public static final int tower3_grayed=0x7f020018;
+        public static final int towerdefault=0x7f020019;
+        public static final int tundra=0x7f02001a;
+        public static final int valley=0x7f02001b;
     }
     public static final class id {
         public static final int headerTextView_id=0x7f060002;
