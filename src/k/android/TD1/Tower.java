@@ -2,6 +2,7 @@ package k.android.TD1;
 
 import java.util.ArrayList;
 
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.Log;
@@ -32,6 +33,7 @@ public class Tower extends DestructableGraphicObject{
 	public ArrayList<AttackMethod> attackMethods = new ArrayList<AttackMethod>();
 	public boolean active = false;
 	public int cost = 100;
+	public int value = 50;
 	
 	public Tower(){
 		// Default
@@ -45,15 +47,6 @@ public class Tower extends DestructableGraphicObject{
 		super(towerBitmapSources.get(towerTypeId));
 		setType(towerTypeId);
 	}
-	
-//	public Tower deepCopy(){
-//		Tower tmp = new Tower();
-//		tmp = (Tower) super.deepCopy();
-//		attackMethods = new ArrayList<AttackMethod>();
-//		for(int i = 0; i < attackMethods.size(); i++)
-//			tmp.attackMethods.add(attackMethods.get(i).deepCopy());
-//		return tmp;
-//	}
 	
 	public Tower shadowCopy(){
 		Tower tmp = new Tower();
@@ -73,8 +66,11 @@ public class Tower extends DestructableGraphicObject{
 		tmp.m_alive = m_alive;
 		tmp.active = active;
 		tmp.attackMethods = new ArrayList<AttackMethod>();
+		
 		for(int i = 0; i < attackMethods.size(); i++){
 			tmp.attackMethods.add(attackMethods.get(i).deepCopy());
+			// set the new tower as the parent
+			tmp.attackMethods.get(tmp.attackMethods.size()-1).owner = tmp;
 		}
 		return tmp;
 	}
@@ -104,17 +100,6 @@ public class Tower extends DestructableGraphicObject{
 	}
 	
 	public boolean draw(Canvas canvas){
-//		Log.d(TAG, "active = " + active);
-///		boolean toReturn = super.draw(canvas);
-//		for(int i = 0; i < attackMethods.size(); i++){
-//			Log.d(TAG, "launching attacks!");
-//			attackMethods.get(i).findTargets();
-//			attackMethods.get(i).attack();
-//			if(!attackMethods.get(i).draw(canvas)){
-//				toReturn = false;
-//				Log.e(TAG, "AttackMethod failed to draw");
-//			}
-///		}
 		return super.draw(canvas);
 	}
 }

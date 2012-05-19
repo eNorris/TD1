@@ -1,6 +1,7 @@
 package k.android.TD1;
 
 import java.util.ArrayList;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
@@ -56,36 +57,6 @@ public class Creep extends DestructableGraphicObject{
 	public void initHealthBar(){
 		healthBar = new HealthBar(30, 5, 1, this.m_health, this.m_maxHealth);
 	}
-	
-	// Not needed, so not implemented
-//	public Creep deepCopy(){
-//		Creep tmp = new Creep();
-//		tmp = (Creep) super.deepCopy();
-//		tmp.movement = movement;
-//		tmp.movementLeft = movementLeft;
-//		tmp.movementToGo = movementToGo;
-//		tmp.targetPoint = targetPoint;
-//		tmp.lockedToPath = lockedToPath;
-//		tmp.path = path.deepCopy(); // <- requires implement CreepPath::deepCopy()
-//		return tmp;
-//	}
-	
-//	/**
-//	 * <b> Shadow on Bitmap:bitmap <br>
-//	 * Shadow on CreepPath:path </b>
-//	 */
-//	public Creep shadowCopy(){
-//		Creep tmp = new Creep();
-//		tmp = (Creep) super.deepCopy();
-//		tmp.movement = movement;
-//		tmp.movementLeft = movementLeft;
-//		tmp.movementToGo = movementToGo;
-//		tmp.targetPoint = targetPoint;
-//		tmp.lockedToPath = lockedToPath;
-//		tmp.path = path; 
-//		tmp.healthBar = healthBar;
-//		return tmp;
-//	}
 	
 	/**
 	 * 

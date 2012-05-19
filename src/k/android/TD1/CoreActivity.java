@@ -3,6 +3,7 @@ package k.android.TD1;
 import java.util.ArrayList;
 import java.util.Random;
 
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -21,17 +22,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-// FIXME CoreActivity.m_gameView is not the same gameview rendering.... <- fixed
-// FIXME firing in random places <- fixed
 // FIXME dissapear bfore reachin end
-// FIXME create healthbars <- done
-// FIXME places TWO towers instead of one <- fixed
 
 public class CoreActivity extends Activity{
 
 	// Member Variables
 	public static final String TAG = "CoreActivity";
-//	public static GameView m_gameView;
 	static protected Tower m_inputTower = null;
 	protected static boolean m_floatingTower = false;
 	
@@ -55,7 +51,6 @@ public class CoreActivity extends Activity{
 		setContentView(R.layout.core);
 		
 		// Realize elements
-//		final GameView gameView = (GameView) findViewById(R.id.xml_gameView_id);
 		final Button newTowerButton = (Button) findViewById(R.id.newTowerButton_id);
 		playerNameTextView = (TextView) findViewById(R.id.corePlayerName_id);
 		playerMoneyTextView = (TextView) findViewById(R.id.corePlayerMoney_id);
@@ -72,6 +67,9 @@ public class CoreActivity extends Activity{
 			public boolean onTouch(View v, MotionEvent event) {
 				switch(event.getAction()){
 				case MotionEvent.ACTION_DOWN:
+					
+					// FIXME Attackmethods are being created with the wrong tower as their parent
+					
 					m_inputTower.setType(Tower.TYPE_1);
 					
 					Log.d(TAG, "@actiondown: inputtowerSize = " + m_inputTower.attackMethods.size());
@@ -79,22 +77,28 @@ public class CoreActivity extends Activity{
 					m_inputTower.setCenter((int) event.getX(), (int) event.getY());
 					m_inputTower.drawable = true;
 					m_inputTower.visible = true;
-					m_inputTower.active = false;
+//					m_inputTower.active = false;
 					m_floatingTower = true;
+					
+					
+					
 					break;
 				case MotionEvent.ACTION_UP:
 					if(m_floatingTower){
 						Log.i(TAG, "releasing, Placing tower");
 						m_inputTower.active = true;
 						Log.d(TAG, "@MotionEvent.up: atksize = " + m_inputTower.attackMethods.size());
+						GameView.playerMoney -= m_inputTower.cost;
 						
 						GameView.worldTowerList.add(m_inputTower.shadowCopy());
+						
 						m_inputTower.visible = false;
 						Log.i(TAG, "new size = " + GameView.worldTowerList.size());
 						m_floatingTower = false;
 					}
 					break;
 				default:
+					Log.d(TAG, "calling motion event default");
 					m_inputTower.setCenter((int) event.getX(), (int) event.getY());
 				};
 				return true;
@@ -116,34 +120,28 @@ public class CoreActivity extends Activity{
 				Creep.creepBitmapSources.add(BitmapFactory.decodeResource(getResources(), Creep.creepBitmapIds[i]));
 	}
 	
-	public static void setPlayerHealth(int health){
-		playerHealthTextView.setText(new Integer(health).toString());
-	}
+//	public static void setPlayerHealth(int health){
+//		playerHealthTextView.setText(new Integer(health).toString());
+//	}
 	
-	public static void setPlayerHealthHandler(final int health){
+	public static void setPlayerHealth(final int health){
 		handler.post(new Runnable(){
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				playerHealthTextView.setText(new Integer(health).toString());
 			}
 		});
 	}
+	
+	public static void setPlayerMoney(final int money){
+		handler.post(new Runnable(){
+			@Override
+			public void run() {
+				playerMoneyTextView.setText(new Integer(money).toString());
+			}
+		});
+	}
 }
-
-
-
-/*
-public void receiveMyMessage() {
-    final String str = receivedAllTheMessage();
-    mHandler.post(new Runnable() {
-        @Override
-        public void run() {
-            // This gets executed on the UI thread so it can safely modify Views
-            mTextView.setText(str);
-        }
-    });
-*/
 
 
 class GameView extends SurfaceView implements SurfaceHolder.Callback{
@@ -243,11 +241,11 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 				canvas.drawBitmap(m_background.bitmap, null, canvas.getClipBounds(), null);
 		}
 		
-		// draw alltowers
+		// draw all towers
 		for(int i = 0; i < worldTowerList.size(); i++)
 			worldTowerList.get(i).draw(canvas);
 		
-		// update and draw all creeps
+		// draw all creeps
 		for(int i = 0; i < worldCreepList.size(); i++)
 			worldCreepList.get(i).draw(canvas);
 		
@@ -257,6 +255,7 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 				worldTowerList.get(i).attackMethods.get(j).draw(canvas);
 		
 		
+		// Draw the tower being placed
 		if(CoreActivity.m_inputTower != null)
 			CoreActivity.m_inputTower.draw(canvas);
 	}
@@ -284,40 +283,28 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 		}
 		
 		// Update creep positions and kill some off
-//		Log.d(TAG, " == Creep Dump ==");
 		for(int i = 0; i < worldCreepList.size(); i++){
-			
-//			Log.d(TAG, "Creep " + i + ": " + worldCreepList.get(i).m_health + "/" + worldCreepList.get(i).m_maxHealth);
-			
 			if(worldCreepList.get(i).advanceAlongPath()){
 				worldCreepList.get(i).onDeath();
-//				Log.d(TAG,  "creep hit end of the line and died");
 				if(i > 0) i--;
 			}else{
 				worldCreepList.get(i).healthBar.updateCurrentHealth(worldCreepList.get(i).m_health);
 			}
 		}
-//		Log.d(TAG, " -- DONE.");
 		
 		// Update Tower Attack Methods
-//		Log.v(TAG, "@update: wtowersize = " + worldTowerList.size());
 		for(int i = 0; i < worldTowerList.size(); i++){
-//			Log.v(TAG, "@update: atksize = " + worldTowerList.get(i).attackMethods.size()); 
 			for(int j = 0; j < worldTowerList.get(i).attackMethods.size(); j++){
-//				Log.v(TAG, "launching attacks!");
 				worldTowerList.get(i).attackMethods.get(j).findTargets();
 				worldTowerList.get(i).attackMethods.get(j).attack();
 			}
 		}
 		
 		// Update player info
-		// TODO
-//		CoreActivity.playerMoneyTextView.setText(new Integer(GameView.playerMoney).toString());
-		CoreActivity.setPlayerHealthHandler(GameView.playerMoney);
-//		CoreActivity.playerHealthTextView.setText(new Integer(GameView.playerHealth).toString());
+		CoreActivity.setPlayerHealth(GameView.playerHealth);
+		CoreActivity.setPlayerMoney(GameView.playerMoney);
 		
-		
-		
+		// Determine if the game is over
 		if(playerHealth <= 0){
 			loseGame();
 		}
