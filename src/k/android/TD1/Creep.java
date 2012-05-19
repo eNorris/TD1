@@ -55,6 +55,7 @@ public class Creep extends DestructableGraphicObject{
 	}
 	
 	public void initHealthBar(){
+		Log.v(TAG, "initializing health bar");
 		healthBar = new HealthBar(30, 5, 1, this.m_health, this.m_maxHealth);
 	}
 	

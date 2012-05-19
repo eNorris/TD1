@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
      
+    <!-- Player Name info -->
     <LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content" 
@@ -15,6 +16,7 @@
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	</LinearLayout>
     
+    <!-- Player Health and Money -->
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content" 
@@ -30,12 +32,44 @@
 	        android:layout_height="wrap_content"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
 	</LinearLayout>
-    
-	<Button
-	    android:id="@+id/newTowerButton_id"
+
+	<!-- Tower Buttons -->
+	<HorizontalScrollView
+	    android:id="@+id/horizontalScrollView1"
 	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:text="@string/newTower_str" />
+	    android:layout_height="wrap_content" >
+
+	    <LinearLayout
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:orientation="horizontal" >
+			<Button
+				android:id="@+id/newTowerButton_id"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/newTower_str" />
+			<Button
+				android:id="@+id/newTowerButton2_id"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/newTower_str" />
+			<Button
+				android:id="@+id/newTowerButton3_id"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/newTower_str" />
+			<Button
+				android:id="@+id/newTowerButton4_id"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/newTower_str" />
+			<Button
+				android:id="@+id/newTowerButton5_id"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/newTower_str" />
+	    </LinearLayout>
+	</HorizontalScrollView>
     
     <FrameLayout
 	 android:layout_width="fill_parent"
