@@ -2,6 +2,7 @@ package k.android.TD1;
 
 import java.util.ArrayList;
 
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -54,8 +55,8 @@ class LineAttackMethod extends AttackMethod{
 	
 	LineAttackMethod(Tower ownerTower){
 		super(ownerTower);
-		power = 10;
-		maxTargets = 5;
+		power = 3;
+		maxTargets = 2;
 	}
 	
 	@Override
@@ -64,9 +65,7 @@ class LineAttackMethod extends AttackMethod{
 			for(int i = 0; i < targets.size(); i++){
 				if(targets.get(i).doDamageStrict(power))
 				{
-//					Log.d(TAG, "Killed a creep!");
 					targets.get(i).onDeath();
-//					targets.remove(i);
 					if(i != 0) i--;
 				}
 			}
@@ -101,6 +100,7 @@ class LineAttackMethod extends AttackMethod{
 		return true;
 	}
 
+	// TODO this isn't copying properly
 	@Override
 	public LineAttackMethod deepCopy() {
 		LineAttackMethod tmp = new LineAttackMethod(owner);
@@ -115,6 +115,42 @@ class LineAttackMethod extends AttackMethod{
 }
 
 
+
+class CollisionAttackMethod extends AttackMethod{
+
+	public CollisionAttackMethod(Tower ownerTower) {
+		super(ownerTower);
+	}
+
+	@Override
+	public boolean draw(Canvas canvas) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public AttackMethod deepCopy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void attack() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void findTargets() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	class Collidable extends MovableGraphicObject{
+		
+	}
+	
+}
 
 
 
