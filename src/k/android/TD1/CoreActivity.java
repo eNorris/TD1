@@ -11,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -20,7 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-// FIXME CoreActivity.m_gameView is not the same gameview rendering.... <- fixec
+// FIXME CoreActivity.m_gameView is not the same gameview rendering.... <- fixed
 // FIXME firing in random places <- fixed
 // FIXME dissapear bfore reachin end
 // FIXME create healthbars <- done
@@ -37,6 +38,8 @@ public class CoreActivity extends Activity{
 	public static TextView playerNameTextView;
 	public static TextView playerHealthTextView;
 	public static TextView playerMoneyTextView;
+	
+	public static Handler handler = new Handler();
 		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +72,6 @@ public class CoreActivity extends Activity{
 			public boolean onTouch(View v, MotionEvent event) {
 				switch(event.getAction()){
 				case MotionEvent.ACTION_DOWN:
-///					m_inputTower = new Tower(Tower.TYPE_1);
 					m_inputTower.setType(Tower.TYPE_1);
 					
 					Log.d(TAG, "@actiondown: inputtowerSize = " + m_inputTower.attackMethods.size());
@@ -117,8 +119,31 @@ public class CoreActivity extends Activity{
 	public static void setPlayerHealth(int health){
 		playerHealthTextView.setText(new Integer(health).toString());
 	}
+	
+	public static void setPlayerHealthHandler(final int health){
+		handler.post(new Runnable(){
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				playerHealthTextView.setText(new Integer(health).toString());
+			}
+		});
+	}
 }
 
+
+
+/*
+public void receiveMyMessage() {
+    final String str = receivedAllTheMessage();
+    mHandler.post(new Runnable() {
+        @Override
+        public void run() {
+            // This gets executed on the UI thread so it can safely modify Views
+            mTextView.setText(str);
+        }
+    });
+*/
 
 
 class GameView extends SurfaceView implements SurfaceHolder.Callback{
@@ -171,7 +196,7 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 
 	// Surface Functions
 	@Override
-	public void surfaceCreated(SurfaceHolder arg0) {
+	public void surfaceCreated(SurfaceHolder holder) {
 		loadBackgroundSourceBitmap(m_bgId);
 		
 		if(m_gameThread.getState() == Thread.State.TERMINATED){
@@ -187,10 +212,10 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 	}
 	
 	@Override
-	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {}
+	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
 
 	@Override
-	public void surfaceDestroyed(SurfaceHolder arg0) {
+	public void surfaceDestroyed(SurfaceHolder holder) {
 		boolean retry = true;
 		m_gameThread.setRunning(false);
 		
@@ -288,6 +313,7 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback{
 		// Update player info
 		// TODO
 //		CoreActivity.playerMoneyTextView.setText(new Integer(GameView.playerMoney).toString());
+		CoreActivity.setPlayerHealthHandler(GameView.playerMoney);
 //		CoreActivity.playerHealthTextView.setText(new Integer(GameView.playerHealth).toString());
 		
 		
